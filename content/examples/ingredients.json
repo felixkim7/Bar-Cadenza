@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "ingredients": [
+    {
+      "ingredient_id": "white_rum",
+      "name": {
+        "en": "White rum",
+        "ko": "화이트 럼"
+      },
+      "category": "spirit",
+      "abv_fraction": 0.4,
+      "flavor_tags": [
+        "spirit"
+      ],
+      "asset_id": "prop_white_rum",
+      "provenance": "Illustrative specification fixture; choose production source later."
+    },
+    {
+      "ingredient_id": "lime_juice",
+      "name": {
+        "en": "Lime juice",
+        "ko": "라임 주스"
+      },
+      "category": "juice",
+      "abv_fraction": 0,
+      "flavor_tags": [
+        "sour",
+        "citrus"
+      ],
+      "asset_id": "prop_lime_juice",
+      "provenance": "Illustrative specification fixture."
+    },
+    {
+      "ingredient_id": "simple_syrup",
+      "name": {
+        "en": "Simple syrup",
+        "ko": "심플 시럽"
+      },
+      "category": "syrup",
+      "abv_fraction": 0,
+      "flavor_tags": [
+        "sweet"
+      ],
+      "asset_id": "prop_simple_syrup",
+      "provenance": "Illustrative specification fixture; concentration must be defined for production."
+    }
+  ]
+}

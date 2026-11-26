@@ -1,0 +1,20 @@
+{
+  "app.title": "Bar Cadenza",
+  "menu.new_game": "New game",
+  "menu.continue": "Continue",
+  "menu.settings": "Settings",
+  "menu.quit": "Quit",
+  "language.choose": "Choose the language for this new game",
+  "language.ko": "한국어",
+  "language.en": "English",
+  "bar.recipe_book": "Recipe book",
+  "bar.send": "Send",
+  "bar.serve": "Serve",
+  "bar.discard": "Discard",
+  "bar.busy": "Finish this action, then reply.",
+  "bar.ai_pending": "Your guest is thinking…",
+  "error.ai_unavailable": "The guest response is unavailable. Try again or continue offline.",
+  "error.save_failed": "Could not save. Your current session is still open.",
+  "mode.offline": "Offline demo",
+  "starter.not_playable": "This is a development scaffold, not a playable game."
+}

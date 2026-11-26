@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "utterance": "오늘 마지막 앙코르가 끝났는데도 아직 긴장이 풀리지 않네요.",
+  "expression_id": "thoughtful",
+  "intent": "chat",
+  "order_proposal": null,
+  "new_revelations": []
+}

@@ -1,0 +1,20 @@
+{
+  "app.title": "Bar Cadenza",
+  "menu.new_game": "새 게임",
+  "menu.continue": "이어하기",
+  "menu.settings": "설정",
+  "menu.quit": "종료",
+  "language.choose": "새 게임에서 사용할 언어를 선택하세요",
+  "language.ko": "한국어",
+  "language.en": "English",
+  "bar.recipe_book": "레시피 북",
+  "bar.send": "보내기",
+  "bar.serve": "서빙",
+  "bar.discard": "버리기",
+  "bar.busy": "이 동작을 마친 뒤 답할 수 있습니다.",
+  "bar.ai_pending": "손님이 생각하고 있습니다…",
+  "error.ai_unavailable": "손님의 응답을 받지 못했습니다. 다시 시도하거나 오프라인으로 계속하세요.",
+  "error.save_failed": "저장하지 못했습니다. 현재 게임은 계속 열려 있습니다.",
+  "mode.offline": "오프라인 데모",
+  "starter.not_playable": "현재는 개발 시작용 구조이며 플레이 가능한 게임이 아닙니다."
+}

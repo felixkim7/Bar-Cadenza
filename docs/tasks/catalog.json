@@ -1,0 +1,658 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "T001",
+      "phase": "P0",
+      "title": "Windows environment and dependency lock",
+      "dependencies": [],
+      "requirements": [
+        "R001",
+        "R036"
+      ],
+      "file": "docs/tasks/T001.md"
+    },
+    {
+      "id": "T002",
+      "phase": "P0",
+      "title": "Window and frame-loop experiment",
+      "dependencies": [
+        "T001"
+      ],
+      "requirements": [
+        "R001",
+        "R004"
+      ],
+      "file": "docs/tasks/T002.md"
+    },
+    {
+      "id": "T003",
+      "phase": "P0",
+      "title": "Bilingual text and Korean IME experiment",
+      "dependencies": [
+        "T002"
+      ],
+      "requirements": [
+        "R002",
+        "R003",
+        "R027"
+      ],
+      "file": "docs/tasks/T003.md"
+    },
+    {
+      "id": "T004",
+      "phase": "P0",
+      "title": "Background job and latency experiment",
+      "dependencies": [
+        "T002"
+      ],
+      "requirements": [
+        "R019",
+        "R020"
+      ],
+      "file": "docs/tasks/T004.md"
+    },
+    {
+      "id": "T005",
+      "phase": "P0",
+      "title": "Windows packaging experiment",
+      "dependencies": [
+        "T002"
+      ],
+      "requirements": [
+        "R031"
+      ],
+      "file": "docs/tasks/T005.md"
+    },
+    {
+      "id": "T006",
+      "phase": "P1",
+      "title": "Application shell and scene routing",
+      "dependencies": [
+        "T003",
+        "T004",
+        "T005"
+      ],
+      "requirements": [
+        "R001",
+        "R002",
+        "R023"
+      ],
+      "file": "docs/tasks/T006.md"
+    },
+    {
+      "id": "T007",
+      "phase": "P1",
+      "title": "Input routing and independent state model",
+      "dependencies": [
+        "T006"
+      ],
+      "requirements": [
+        "R004",
+        "R005",
+        "R029"
+      ],
+      "file": "docs/tasks/T007.md"
+    },
+    {
+      "id": "T008",
+      "phase": "P1",
+      "title": "Asset loader and layered scene manifest",
+      "dependencies": [
+        "T006"
+      ],
+      "requirements": [
+        "R026",
+        "R035"
+      ],
+      "file": "docs/tasks/T008.md"
+    },
+    {
+      "id": "T009",
+      "phase": "P1",
+      "title": "Visual integration gate",
+      "dependencies": [
+        "T007",
+        "T008"
+      ],
+      "requirements": [
+        "R025",
+        "R026",
+        "R029"
+      ],
+      "file": "docs/tasks/T009.md"
+    },
+    {
+      "id": "T010",
+      "phase": "P2",
+      "title": "Typed content and gameplay contracts",
+      "dependencies": [
+        "T007"
+      ],
+      "requirements": [
+        "R006",
+        "R007",
+        "R035"
+      ],
+      "file": "docs/tasks/T010.md"
+    },
+    {
+      "id": "T011",
+      "phase": "P2",
+      "title": "Save schema and repository foundation",
+      "dependencies": [
+        "T010"
+      ],
+      "requirements": [
+        "R002",
+        "R024"
+      ],
+      "file": "docs/tasks/T011.md"
+    },
+    {
+      "id": "T012",
+      "phase": "P2",
+      "title": "Representative catalogue and offline guest",
+      "dependencies": [
+        "T010"
+      ],
+      "requirements": [
+        "R006",
+        "R007",
+        "R015",
+        "R035"
+      ],
+      "file": "docs/tasks/T012.md"
+    },
+    {
+      "id": "T013",
+      "phase": "P2",
+      "title": "Complete offline visit checkpoint",
+      "dependencies": [
+        "T006",
+        "T008",
+        "T011",
+        "T012"
+      ],
+      "requirements": [
+        "R005",
+        "R007",
+        "R020",
+        "R023"
+      ],
+      "file": "docs/tasks/T013.md"
+    },
+    {
+      "id": "T014",
+      "phase": "P3",
+      "title": "Measured pouring and vessel transfer",
+      "dependencies": [
+        "T013"
+      ],
+      "requirements": [
+        "R008"
+      ],
+      "file": "docs/tasks/T014.md"
+    },
+    {
+      "id": "T015",
+      "phase": "P3",
+      "title": "Shaking interaction",
+      "dependencies": [
+        "T014"
+      ],
+      "requirements": [
+        "R009"
+      ],
+      "file": "docs/tasks/T015.md"
+    },
+    {
+      "id": "T016",
+      "phase": "P3",
+      "title": "Stirring interaction",
+      "dependencies": [
+        "T014"
+      ],
+      "requirements": [
+        "R010"
+      ],
+      "file": "docs/tasks/T016.md"
+    },
+    {
+      "id": "T017",
+      "phase": "P3",
+      "title": "Ice, strain, glass and garnish",
+      "dependencies": [
+        "T015",
+        "T016"
+      ],
+      "requirements": [
+        "R011"
+      ],
+      "file": "docs/tasks/T017.md"
+    },
+    {
+      "id": "T018",
+      "phase": "P3",
+      "title": "Bilingual searchable recipe book",
+      "dependencies": [
+        "T012",
+        "T017"
+      ],
+      "requirements": [
+        "R012",
+        "R027"
+      ],
+      "file": "docs/tasks/T018.md"
+    },
+    {
+      "id": "T019",
+      "phase": "P3",
+      "title": "Deterministic craft and taste-fit evaluation",
+      "dependencies": [
+        "T017",
+        "T018"
+      ],
+      "requirements": [
+        "R007",
+        "R013"
+      ],
+      "file": "docs/tasks/T019.md"
+    },
+    {
+      "id": "T020",
+      "phase": "P3",
+      "title": "Discard, remake and drink-state recovery",
+      "dependencies": [
+        "T019"
+      ],
+      "requirements": [
+        "R008",
+        "R011",
+        "R013"
+      ],
+      "file": "docs/tasks/T020.md"
+    },
+    {
+      "id": "T021",
+      "phase": "P4",
+      "title": "Continuous-time chat during busy actions",
+      "dependencies": [
+        "T020",
+        "T003"
+      ],
+      "requirements": [
+        "R003",
+        "R004",
+        "R005"
+      ],
+      "file": "docs/tasks/T021.md"
+    },
+    {
+      "id": "T022",
+      "phase": "P4",
+      "title": "Long visits and conversation after serving",
+      "dependencies": [
+        "T021"
+      ],
+      "requirements": [
+        "R005",
+        "R016"
+      ],
+      "file": "docs/tasks/T022.md"
+    },
+    {
+      "id": "T023",
+      "phase": "P4",
+      "title": "Complete localization and journal UI",
+      "dependencies": [
+        "T022",
+        "T011"
+      ],
+      "requirements": [
+        "R002",
+        "R003",
+        "R027"
+      ],
+      "file": "docs/tasks/T023.md"
+    },
+    {
+      "id": "T024",
+      "phase": "P5",
+      "title": "AI interface, context assembly and prompt contracts",
+      "dependencies": [
+        "T023",
+        "T004"
+      ],
+      "requirements": [
+        "R007",
+        "R018",
+        "R019",
+        "R030"
+      ],
+      "file": "docs/tasks/T024.md"
+    },
+    {
+      "id": "T025",
+      "phase": "P5",
+      "title": "Initial live provider integration",
+      "dependencies": [
+        "T024"
+      ],
+      "requirements": [
+        "R018",
+        "R019",
+        "R027",
+        "R030"
+      ],
+      "file": "docs/tasks/T025.md"
+    },
+    {
+      "id": "T026",
+      "phase": "P5",
+      "title": "AI failures, usage limits and offline recovery",
+      "dependencies": [
+        "T025"
+      ],
+      "requirements": [
+        "R019",
+        "R020",
+        "R030"
+      ],
+      "file": "docs/tasks/T026.md"
+    },
+    {
+      "id": "T027",
+      "phase": "P5",
+      "title": "Evidenced memory and conversation summaries",
+      "dependencies": [
+        "T026",
+        "T011"
+      ],
+      "requirements": [
+        "R017",
+        "R024"
+      ],
+      "file": "docs/tasks/T027.md"
+    },
+    {
+      "id": "T028",
+      "phase": "P5",
+      "title": "Returning customer encounter",
+      "dependencies": [
+        "T027"
+      ],
+      "requirements": [
+        "R015",
+        "R016",
+        "R017"
+      ],
+      "file": "docs/tasks/T028.md"
+    },
+    {
+      "id": "T029",
+      "phase": "P6",
+      "title": "Rapport evaluator and calibration fixtures",
+      "dependencies": [
+        "T028"
+      ],
+      "requirements": [
+        "R014"
+      ],
+      "file": "docs/tasks/T029.md"
+    },
+    {
+      "id": "T030",
+      "phase": "P6",
+      "title": "Visit feedback and idempotent results",
+      "dependencies": [
+        "T029",
+        "T019"
+      ],
+      "requirements": [
+        "R013",
+        "R014",
+        "R024"
+      ],
+      "file": "docs/tasks/T030.md"
+    },
+    {
+      "id": "T031",
+      "phase": "P6",
+      "title": "Inventory and economy ledger",
+      "dependencies": [
+        "T030"
+      ],
+      "requirements": [
+        "R022",
+        "R024"
+      ],
+      "file": "docs/tasks/T031.md"
+    },
+    {
+      "id": "T032",
+      "phase": "P6",
+      "title": "Level and relationship progression",
+      "dependencies": [
+        "T031"
+      ],
+      "requirements": [
+        "R021",
+        "R015"
+      ],
+      "file": "docs/tasks/T032.md"
+    },
+    {
+      "id": "T033",
+      "phase": "P6",
+      "title": "Complete multi-shift game loop",
+      "dependencies": [
+        "T032"
+      ],
+      "requirements": [
+        "R021",
+        "R022",
+        "R023",
+        "R024"
+      ],
+      "file": "docs/tasks/T033.md"
+    },
+    {
+      "id": "T034",
+      "phase": "P7",
+      "title": "Character creation policy and profile generator",
+      "dependencies": [
+        "T033"
+      ],
+      "requirements": [
+        "R015",
+        "R016",
+        "R032"
+      ],
+      "file": "docs/tasks/T034.md"
+    },
+    {
+      "id": "T035",
+      "phase": "P7",
+      "title": "Portrait strategy and asset compatibility",
+      "dependencies": [
+        "T034",
+        "T009"
+      ],
+      "requirements": [
+        "R025",
+        "R026",
+        "R033"
+      ],
+      "file": "docs/tasks/T035.md"
+    },
+    {
+      "id": "T036",
+      "phase": "P7",
+      "title": "Background guest preparation and scheduling",
+      "dependencies": [
+        "T035"
+      ],
+      "requirements": [
+        "R015",
+        "R019",
+        "R032",
+        "R033"
+      ],
+      "file": "docs/tasks/T036.md"
+    },
+    {
+      "id": "T037",
+      "phase": "P7",
+      "title": "Story variety and relationship pacing",
+      "dependencies": [
+        "T036"
+      ],
+      "requirements": [
+        "R015",
+        "R016",
+        "R017"
+      ],
+      "file": "docs/tasks/T037.md"
+    },
+    {
+      "id": "T038",
+      "phase": "P7",
+      "title": "Optional suggested replies",
+      "dependencies": [
+        "T037"
+      ],
+      "requirements": [
+        "R034",
+        "R027"
+      ],
+      "file": "docs/tasks/T038.md"
+    },
+    {
+      "id": "T039",
+      "phase": "P8",
+      "title": "Catalogue import and validation pipeline",
+      "dependencies": [
+        "T033",
+        "T012"
+      ],
+      "requirements": [
+        "R006",
+        "R035"
+      ],
+      "file": "docs/tasks/T039.md"
+    },
+    {
+      "id": "T040",
+      "phase": "P8",
+      "title": "Broad catalogue and content integration",
+      "dependencies": [
+        "T039",
+        "T037"
+      ],
+      "requirements": [
+        "R006",
+        "R007",
+        "R012",
+        "R015",
+        "R035"
+      ],
+      "file": "docs/tasks/T040.md"
+    },
+    {
+      "id": "T041",
+      "phase": "P8",
+      "title": "Production art and expression integration",
+      "dependencies": [
+        "T009",
+        "T035",
+        "T040"
+      ],
+      "requirements": [
+        "R025",
+        "R026",
+        "R035"
+      ],
+      "file": "docs/tasks/T041.md"
+    },
+    {
+      "id": "T042",
+      "phase": "P8",
+      "title": "Sound and music integration",
+      "dependencies": [
+        "T033"
+      ],
+      "requirements": [
+        "R028",
+        "R035"
+      ],
+      "file": "docs/tasks/T042.md"
+    },
+    {
+      "id": "T043",
+      "phase": "P9",
+      "title": "Settings, readability and interaction polish",
+      "dependencies": [
+        "T041",
+        "T042",
+        "T038"
+      ],
+      "requirements": [
+        "R003",
+        "R027",
+        "R029"
+      ],
+      "file": "docs/tasks/T043.md"
+    },
+    {
+      "id": "T044",
+      "phase": "P9",
+      "title": "Playtest and balance full game",
+      "dependencies": [
+        "T043",
+        "T040"
+      ],
+      "requirements": [
+        "R013",
+        "R014",
+        "R016",
+        "R021",
+        "R022"
+      ],
+      "file": "docs/tasks/T044.md"
+    },
+    {
+      "id": "T045",
+      "phase": "P9",
+      "title": "Save migration and failure regression",
+      "dependencies": [
+        "T044"
+      ],
+      "requirements": [
+        "R019",
+        "R020",
+        "R024",
+        "R030"
+      ],
+      "file": "docs/tasks/T045.md"
+    },
+    {
+      "id": "T046",
+      "phase": "P9",
+      "title": "Windows release and submission checkpoint",
+      "dependencies": [
+        "T045",
+        "T005"
+      ],
+      "requirements": [
+        "R001",
+        "R020",
+        "R023",
+        "R027",
+        "R031",
+        "R036"
+      ],
+      "file": "docs/tasks/T046.md"
+    }
+  ]
+}

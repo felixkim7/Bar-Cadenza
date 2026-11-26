@@ -26,6 +26,7 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | D019 | Python 3.14 instead of the 3.12 baseline (user decision 2026-11-26; 3.14 is installed locally, 3.12 is not). |
 | D020 | Deadline 2026-12-01. Go as far as possible in dependency order; do not reduce the dev plan or scope (user decision 2026-11-26). |
 | D021 | Chat input: Enter sends at once, including a syllable still being composed; Shift+Enter inserts a line break; held Backspace/Delete/arrows repeat; no composition underline. Supersedes 'composition Enter must not submit' (user decision 2026-11-26, after the T003 IME test). |
+| D022 | Game time measures physical actions (pour duration, shake/stir duration and intensity, ice/dilution) and lets bartending and conversation run at once; it is not a countdown on the whole evening (user statement 2026-11-26). Resulting O008 policy: typing, reading, recipe browsing, busy actions and pending AI never pause time; Esc opens a pause menu (Resume / Main menu) that stops time; losing window focus or minimizing opens the same menu and ends any held action; a window drag/resize stall adds no time; other gaps stay capped at 1 s. |
 
 ## Engineering baselines
 | ID | Baseline | Revisit when |
@@ -39,7 +40,7 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | B007 | 1280×720 logical layout, scalable window; final raster export sizes decided at visual gate | T009 visual test |
 | B008 | Persist language per save; do not translate past transcripts on load | User chooses mid-save language switching |
 | B009 | Busy-action-aware reply grace; no automatic pause; network delay never directly penalizes rapport | Timing playtest |
-| B010 | Main-menu and explicit pause behavior left separate from the no-chat-pause rule | Pause decision needed |
+| B010 | Main-menu and explicit pause behavior left separate from the no-chat-pause rule; pause policy settled in D022 (T007) | Playtest shows the pause menu or focus pause misfires |
 | B011 | PyInstaller one-folder windowed build; resources via app/paths.resource_root (bundle or repo root, never cwd); user data in %LOCALAPPDATA%/BarCadenza via platformdirs (T005) | A Windows build or distribution issue appears |
 
 ## Open decisions and latest responsible task
@@ -52,7 +53,6 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | O005 | Authored/generated cast balance and whether runtime story generation is mandatory for submission | T034 | Plan generation module without counting it as confirmed scope |
 | O006 | Runtime image generation vs prepared/modular portraits | T035 | Prepared placeholder portrait pool |
 | O007 | Final base resolution, asset sizes, and additional exact palette values | T009 | B007 and named palette roles; no invented approved colors |
-| O008 | Pause-menu, focus-loss, suspend and window-drag behavior (T002: SDL2 on Windows stalls the loop during a window drag; gaps > 1 s currently dropped) | T007 | Report open choice; no text-input pause |
 | O009 | Currency/world location, progression thresholds, and score weights | T031 | Configurable illustrative values clearly labeled |
 | O010 | Human-only or mixed species cast | T034 | Human fixtures only; no anthropomorphic cast assumed approved |
 | O011 | Content boundaries and intended rating | T024 / T034 | Adult patrons and everyday issues; sensitive themes reviewed explicitly |

@@ -16,7 +16,7 @@
 ## Main loop
 Poll input → route intent to UI/controller → advance simulation using elapsed time → drain completed jobs within a bounded frame budget → validate/apply domain commands → render → cap frame rate. Main thread owns display, event handling, active state, and sprite mutation. Network worker returns plain validated data; it does not draw.
 
-Separate real monotonic elapsed time, simulation time, action elapsed time, and conversation metrics. Clamp/handle extreme frame gaps consistently; app-suspend/focus behavior requires O008. Never substitute frame count for elapsed time. Text entry does not alter simulation speed.
+Separate real monotonic elapsed time, simulation time, action elapsed time, and conversation metrics. Clamp/handle extreme frame gaps consistently; pause, focus loss, minimize and window-drag stalls follow D022. Never substitute frame count for elapsed time. Text entry does not alter simulation speed.
 
 ## Independent states
 - Encounter: arriving / ordering / visiting / departing / closed.

@@ -5,6 +5,7 @@ Run: uv run python -m bar_cadenza [--seconds S]
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -18,6 +19,9 @@ from bar_cadenza.scenes.shell import MainMenu
 
 LOGICAL_SIZE = (1280, 720)  # B007
 FONT = "assets/fonts/NanumGothic-Regular.ttf"
+# SDL2 on Windows freezes the loop while the window is dragged or resized; these events
+# arrive in the first frame after, whose gap is then dropped (D022).
+STALL_EVENTS = {pygame.WINDOWMOVED, pygame.WINDOWSIZECHANGED}
 
 
 class StartupError(Exception):
@@ -67,12 +71,19 @@ class App:
         self.scene = scene
 
     def frame(self, events: list, dt_ns: int) -> None:
-        self.sim.advance(dt_ns)
+        """Events first, so a pause or a drag reported this frame also keeps this frame's
+        gap out of game time (D022). Typing and busy actions never stop time."""
+        stalled = False
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
             else:
+                stalled |= event.type in STALL_EVENTS
                 self.scene.handle(event)
+        if not (stalled or getattr(self.scene, "paused", False)):
+            self.sim.advance(dt_ns)
+        if update := getattr(self.scene, "update", None):
+            update()
         self.scene.draw(self.screen)
 
 
@@ -96,10 +107,12 @@ def run(max_seconds: float | None = None) -> int:
     except StartupError as exc:
         _report_startup_error(str(exc))
         return 1
+    os.environ.setdefault("SDL_IME_SHOW_UI", "1")  # native candidate list (e.g. Hanja)
     pygame.init()
     try:
         screen = pygame.display.set_mode(LOGICAL_SIZE, pygame.SCALED | pygame.RESIZABLE)
         pygame.display.set_caption(strings["en"]["app.title"])
+        pygame.key.set_repeat(500, 33)  # held keys repeat like Windows (D021)
         app = App(screen, strings, root / FONT)
         limiter = pygame.time.Clock()
         start = last = time.perf_counter_ns()

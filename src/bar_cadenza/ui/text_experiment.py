@@ -17,7 +17,7 @@ import pygame
 from bar_cadenza.app.clock import NS_PER_S, SimClock
 from bar_cadenza.app.paths import resource_root
 from bar_cadenza.app.window_experiment import ACCENT, BG, FG, LOGICAL_SIZE, indicator_x
-from bar_cadenza.ui.text_input import TextField, line_of, wrap_spans
+from bar_cadenza.ui.text_input import TextField, draw_field, wrap_spans
 
 FONT_PATH = resource_root() / "assets/fonts/NanumGothic-Regular.ttf"
 LOCALES_DIR = resource_root() / "content/locales"
@@ -109,19 +109,7 @@ def run(max_seconds: float | None = None) -> list[str]:
             # Draft with the composition shown inline at the cursor.
             pygame.draw.rect(screen, PANEL, INPUT_RECT)
             pygame.draw.rect(screen, ACCENT, INPUT_RECT, 2)
-            shown = field.text[: field.cursor] + field.composition + field.text[field.cursor :]
-            spans = wrap_spans(shown, width, lambda s: font.size(s)[0])
-            caret = field.cursor + len(field.composition)
-            caret_line = line_of(spans, caret)
-            first = max(0, caret_line - 2)
-            for n, (a, b) in enumerate(spans[first : first + 3]):
-                y = INPUT_RECT.y + PAD + n * line_h
-                screen.blit(font.render(shown[a:b], True, FG), (INPUT_RECT.x + PAD, y))
-            a = spans[caret_line][0]
-            cx = INPUT_RECT.x + PAD + font.size(shown[a:caret])[0]
-            cy = INPUT_RECT.y + PAD + (caret_line - first) * line_h
-            pygame.draw.line(screen, FG, (cx, cy + 2), (cx, cy + line_h - 2), 2)
-            rect = (cx, cy, 2, line_h)
+            rect = draw_field(screen, font, field, INPUT_RECT, FG, PAD)
             if rect != ime_rect:  # keep the IME candidate window at the caret
                 pygame.key.set_text_input_rect(rect)
                 ime_rect = rect

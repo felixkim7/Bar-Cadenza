@@ -9,8 +9,8 @@ All tasks start not_started. Follow dependency order; document any safe deferral
 | [T003](T003.md) | P0 | Bilingual text and Korean IME experiment | T002 | done |
 | [T004](T004.md) | P0 | Background job and latency experiment | T002 | done |
 | [T005](T005.md) | P0 | Windows packaging experiment | T002 | done |
-| [T006](T006.md) | P1 | Application shell and scene routing | T003, T004, T005 | in_progress |
-| [T007](T007.md) | P1 | Input routing and independent state model | T006 | not_started |
+| [T006](T006.md) | P1 | Application shell and scene routing | T003, T004, T005 | done |
+| [T007](T007.md) | P1 | Input routing and independent state model | T006 | in_progress |
 | [T008](T008.md) | P1 | Asset loader and layered scene manifest | T006 | not_started |
 | [T009](T009.md) | P1 | Visual integration gate | T007, T008 | not_started |
 | [T010](T010.md) | P2 | Typed content and gameplay contracts | T007 | not_started |

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 NS_PER_MS = 1_000_000
 NS_PER_S = 1_000_000_000
 
-# ponytail: one fixed cap for extreme gaps (OS stall, sleep); suspend/focus policy is O008.
+# ponytail: one fixed cap for unexplained gaps; pause/focus/drag stalls are handled by D022.
 MAX_STEP_NS = 1 * NS_PER_S
 
 

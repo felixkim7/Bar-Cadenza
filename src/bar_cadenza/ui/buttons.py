@@ -56,9 +56,10 @@ class ButtonList:
     def _hit(self, pos: tuple[int, int]) -> int | None:
         return next((i for i, r in enumerate(self.rects()) if r.collidepoint(pos)), None)
 
-    def draw(self, screen: pygame.Surface, font: pygame.font.Font) -> None:
+    def draw(self, screen: pygame.Surface, font: pygame.font.Font, active: bool = True) -> None:
+        """`active` False hides the focus ring while keyboard focus is elsewhere."""
         for i, (rect, (_, label)) in enumerate(zip(self.rects(), self.items)):
-            focused = i == self.focus
+            focused = active and i == self.focus
             pygame.draw.rect(screen, BURNT_COFFEE, rect, border_radius=6)
             border = WHISKEY_SOUR if focused else HONEY_GARLIC
             pygame.draw.rect(screen, border, rect, 4 if focused else 2, border_radius=6)

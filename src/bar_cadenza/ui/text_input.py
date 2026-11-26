@@ -1,4 +1,4 @@
-"""Free-typing text field with IME composition, plus line wrapping. No rendering here."""
+"""Free-typing text field with IME composition, line wrapping and draft drawing."""
 
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -26,6 +26,7 @@ class TextField:
     cursor: int = 0
     composition: str = ""
     max_chars: int = MAX_CHARS
+    send_blocked: bool = False  # Enter keeps the draft instead of sending (reply in flight)
     _ime_active: bool = False
     _pending_enter: str | None = None
 
@@ -84,7 +85,7 @@ class TextField:
         if action == "newline":
             self.insert("\n")
             return None
-        return self.take()
+        return None if self.send_blocked else self.take()
 
     def _key(self, event: pygame.event.Event) -> str | None:
         key = event.key
@@ -144,3 +145,29 @@ def line_of(spans: list[tuple[int, int]], index: int) -> int:
         if index <= end:
             return n
     return len(spans) - 1
+
+
+def draw_field(
+    screen: pygame.Surface,
+    font: pygame.font.Font,
+    field: TextField,
+    rect: pygame.Rect,
+    color: tuple[int, int, int],
+    pad: int = 12,
+) -> pygame.Rect:
+    """Draw the draft with the IME composition inline at the cursor (no underline, D021),
+    keeping the caret line visible. Returns the caret rect for set_text_input_rect."""
+    line_h = font.get_linesize()
+    rows = max((rect.height - 2 * pad) // line_h, 1)
+    shown = field.text[: field.cursor] + field.composition + field.text[field.cursor :]
+    spans = wrap_spans(shown, rect.width - 2 * pad, lambda s: font.size(s)[0])
+    caret = field.cursor + len(field.composition)
+    caret_line = line_of(spans, caret)
+    first = max(0, caret_line - rows + 1)
+    for n, (a, b) in enumerate(spans[first : first + rows]):
+        screen.blit(font.render(shown[a:b], True, color), (rect.x + pad, rect.y + pad + n * line_h))
+    a = spans[caret_line][0]
+    cx = rect.x + pad + font.size(shown[a:caret])[0]
+    cy = rect.y + pad + (caret_line - first) * line_h
+    pygame.draw.line(screen, color, (cx, cy + 2), (cx, cy + line_h - 2), 2)
+    return pygame.Rect(cx, cy, 2, line_h)

@@ -7,8 +7,8 @@ All tasks start not_started. Follow dependency order; document any safe deferral
 | [T001](T001.md) | P0 | Windows environment and dependency lock | — | done |
 | [T002](T002.md) | P0 | Window and frame-loop experiment | T001 | done |
 | [T003](T003.md) | P0 | Bilingual text and Korean IME experiment | T002 | done |
-| [T004](T004.md) | P0 | Background job and latency experiment | T002 | not_started |
-| [T005](T005.md) | P0 | Windows packaging experiment | T002 | not_started |
+| [T004](T004.md) | P0 | Background job and latency experiment | T002 | done |
+| [T005](T005.md) | P0 | Windows packaging experiment | T002 | done |
 | [T006](T006.md) | P1 | Application shell and scene routing | T003, T004, T005 | not_started |
 | [T007](T007.md) | P1 | Input routing and independent state model | T006 | not_started |
 | [T008](T008.md) | P1 | Asset loader and layered scene manifest | T006 | not_started |

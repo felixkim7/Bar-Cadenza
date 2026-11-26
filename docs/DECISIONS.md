@@ -40,6 +40,7 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | B008 | Persist language per save; do not translate past transcripts on load | User chooses mid-save language switching |
 | B009 | Busy-action-aware reply grace; no automatic pause; network delay never directly penalizes rapport | Timing playtest |
 | B010 | Main-menu and explicit pause behavior left separate from the no-chat-pause rule | Pause decision needed |
+| B011 | PyInstaller one-folder windowed build; resources via app/paths.resource_root (bundle or repo root, never cwd); user data in %LOCALAPPDATA%/BarCadenza via platformdirs (T005) | A Windows build or distribution issue appears |
 
 ## Open decisions and latest responsible task
 | ID | Decision | Needed by | Default approach until answered |

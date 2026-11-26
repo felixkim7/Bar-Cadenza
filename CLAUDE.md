@@ -38,7 +38,7 @@ Read only relevant detail documents; do not load the whole pack every turn.
 - Bootstrap diagnostic (not a game): python tools/starter_info.py
 - Initial dependency resolution on target machine: uv lock; uv sync
 - After locking: uv sync --locked
-- Future application entry: uv run python -m bar_cadenza (currently prints scaffold status)
+- Application entry: uv run python -m bar_cadenza (game shell since T006; --seconds S auto-quits)
 - Tests after actual tests exist: uv run pytest
 - Style checks: uv run ruff check .; uv run ruff format --check .
 

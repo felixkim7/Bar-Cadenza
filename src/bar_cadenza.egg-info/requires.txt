@@ -1,4 +1,0 @@
-pygame-ce<3,>=2.5
-pydantic<3,>=2.8
-platformdirs<5,>=4
-python-dotenv<2,>=1

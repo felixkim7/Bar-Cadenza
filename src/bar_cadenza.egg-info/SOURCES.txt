@@ -1,9 +1,0 @@
-README.md
-pyproject.toml
-src/bar_cadenza/__init__.py
-src/bar_cadenza/__main__.py
-src/bar_cadenza.egg-info/PKG-INFO
-src/bar_cadenza.egg-info/SOURCES.txt
-src/bar_cadenza.egg-info/dependency_links.txt
-src/bar_cadenza.egg-info/requires.txt
-src/bar_cadenza.egg-info/top_level.txt

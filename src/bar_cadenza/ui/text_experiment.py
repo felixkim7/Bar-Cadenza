@@ -11,18 +11,16 @@ import json
 import os
 import sys
 import time
-from pathlib import Path
 
 import pygame
 
 from bar_cadenza.app.clock import NS_PER_S, SimClock
+from bar_cadenza.app.paths import resource_root
 from bar_cadenza.app.window_experiment import ACCENT, BG, FG, LOGICAL_SIZE, indicator_x
 from bar_cadenza.ui.text_input import TextField, line_of, wrap_spans
 
-# ponytail: repo-relative paths; packaged resource lookup is decided in T005/T008.
-ROOT = Path(__file__).resolve().parents[3]
-FONT_PATH = ROOT / "assets/fonts/NanumGothic-Regular.ttf"
-LOCALES_DIR = ROOT / "content/locales"
+FONT_PATH = resource_root() / "assets/fonts/NanumGothic-Regular.ttf"
+LOCALES_DIR = resource_root() / "content/locales"
 PANEL = (52, 21, 15)  # Burnt Coffee
 LOG_RECT = pygame.Rect(40, 70, 1200, 460)
 INPUT_RECT = pygame.Rect(40, 550, 1200, 112)
@@ -30,9 +28,7 @@ PAD = 12
 MIXED_SAMPLE = (
     "Mixed wrap test — 손님이 Daiquiri를 주문했습니다. The violinist says the last encore "
     "still hums in her ears; 화이트 럼 60 ml, 라임 주스 25 ml, 심플 시럽 15 ml를 넣고 "
-    "얼음과 함께 흔든 뒤 coupe 잔에 걸러 주세요. A very long unbroken run follows: "
-    "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하"
-    "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하."
+    "얼음과 함께 흔든 뒤 coupe 잔에 걸러 주세요."
 )
 
 

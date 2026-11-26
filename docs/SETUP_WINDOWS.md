@@ -37,4 +37,17 @@ uv run ruff format --check .
 Pytest is meaningful only once tests have been added; an empty suite is not a passing game test. Run the built game with a working directory different from the repository during release verification.
 
 ## Windows checks
-Test 100/125/150% DPI where available, resize/fullscreen if supported, Korean IME candidate positioning and Enter composition, audio device failure, Unicode save paths, and package startup without a development Python install. Build Windows executables on Windows. Select and verify the packaging tool in T005 rather than assuming source execution guarantees packaging.
+Test 100/125/150% DPI where available, resize/fullscreen if supported, Korean IME candidate positioning and Enter composition, audio device failure, Unicode save paths, and package startup without a development Python install. Build Windows executables on Windows.
+
+## Packaging (selected in T005)
+Tool: PyInstaller 6.22.3 (dev dependency, `pyinstaller>=6.16,<7` in pyproject.toml, locked in uv.lock). One-folder build, windowed (no console). pygame-ce ships its own PyInstaller hook for the SDL DLLs.
+```powershell
+uv sync --locked
+uv run pyinstaller --noconfirm --clean tools/package_probe.spec
+.\dist\BarCadenzaProbe\BarCadenzaProbe.exe --seconds 4
+Get-Content "$env:LOCALAPPDATA\BarCadenza\package_probe.txt"
+```
+- Output: `dist/BarCadenzaProbe/` (≈39 MB; `build/` and `dist/` are gitignored). Ship the whole folder, not just the .exe.
+- Resources: code finds bundled files with `bar_cadenza.app.paths.resource_root()` (the bundle's `_internal/` when frozen, else the repo root; never the cwd). Only folders listed in the spec's `datas` are bundled; add new asset/content folders there.
+- User data: `bar_cadenza.app.paths.user_data_dir()` → `%LOCALAPPDATA%\BarCadenza` (via platformdirs).
+- The probe is a feasibility build (the T003 text window), not the game. The final game spec replaces it in T046.

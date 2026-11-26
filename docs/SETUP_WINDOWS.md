@@ -17,7 +17,7 @@ uv sync --locked
 uv run python -m bar_cadenza
 uv run python -c "import pygame; print(pygame.version.ver); print(getattr(pygame, 'IS_CE', False))"
 ```
-Expected now: the entry point prints that it is a scaffold, not a game. The pygame check should identify pygame-ce. Do not install the original pygame alongside pygame-ce in the same environment.
+Expected now: the entry point opens the game shell window (main menu → language → placeholder pre-shift/bar/results); add `--seconds 3` to auto-quit. The pygame check should identify pygame-ce. Do not install the original pygame alongside pygame-ce in the same environment.
 
 The archive intentionally omits uv.lock because dependency resolution was not claimed. Generate it in T001, commit it after successful resolution, and use `uv sync --locked` thereafter. Initial bounded ranges are compatibility proposals, not a tested release environment. Update a range only for an observed issue and record the reason.
 

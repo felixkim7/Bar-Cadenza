@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "ingredients": [
+    {
+      "ingredient_id": "gin",
+      "name": {"en": "Gin", "ko": "진"},
+      "category": "spirit",
+      "abv_fraction": 0.43,
+      "flavor_tags": ["herbal", "dry"],
+      "asset_id": "prop_bottle_gin_idle",
+      "provenance": "T012 fixture (London dry style); typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "white_rum",
+      "name": {"en": "White rum", "ko": "화이트 럼"},
+      "category": "spirit",
+      "abv_fraction": 0.4,
+      "flavor_tags": ["light"],
+      "provenance": "T012 fixture; typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "cognac",
+      "name": {"en": "Cognac", "ko": "코냑"},
+      "category": "spirit",
+      "abv_fraction": 0.4,
+      "flavor_tags": ["fruity"],
+      "provenance": "T012 fixture; typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "rye_whiskey",
+      "name": {"en": "Rye whiskey", "ko": "라이 위스키"},
+      "category": "spirit",
+      "abv_fraction": 0.45,
+      "flavor_tags": ["spicy", "strong"],
+      "provenance": "T012 fixture; typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "dry_vermouth",
+      "name": {"en": "Dry vermouth", "ko": "드라이 베르무트"},
+      "category": "wine",
+      "abv_fraction": 0.18,
+      "flavor_tags": ["dry", "herbal"],
+      "provenance": "T012 fixture; fortified wine, typical ABV."
+    },
+    {
+      "ingredient_id": "sweet_vermouth",
+      "name": {"en": "Sweet vermouth", "ko": "스위트 베르무트"},
+      "category": "wine",
+      "abv_fraction": 0.16,
+      "flavor_tags": ["sweet", "herbal"],
+      "provenance": "T012 fixture; fortified wine, typical ABV."
+    },
+    {
+      "ingredient_id": "orange_liqueur",
+      "name": {"en": "Orange liqueur", "ko": "오렌지 리큐어"},
+      "category": "liqueur",
+      "abv_fraction": 0.4,
+      "flavor_tags": ["sweet", "citrus"],
+      "provenance": "T012 fixture (triple sec style); typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "campari",
+      "name": {"en": "Campari", "ko": "캄파리"},
+      "category": "liqueur",
+      "abv_fraction": 0.25,
+      "flavor_tags": ["bitter", "herbal"],
+      "provenance": "T012 fixture; real brand allowed by D026, made since the 1860s."
+    },
+    {
+      "ingredient_id": "angostura_bitters",
+      "name": {"en": "Angostura bitters", "ko": "앙고스투라 비터스"},
+      "category": "bitters",
+      "abv_fraction": 0.447,
+      "flavor_tags": ["bitter", "spicy"],
+      "provenance": "T012 fixture; real brand allowed by D026, made since the 1820s."
+    },
+    {
+      "ingredient_id": "orange_bitters",
+      "name": {"en": "Orange bitters", "ko": "오렌지 비터스"},
+      "category": "bitters",
+      "abv_fraction": 0.28,
+      "flavor_tags": ["bitter", "citrus"],
+      "provenance": "T012 fixture; typical ABV, products vary."
+    },
+    {
+      "ingredient_id": "lemon_juice",
+      "name": {"en": "Fresh lemon juice", "ko": "생레몬즙"},
+      "category": "juice",
+      "abv_fraction": 0,
+      "flavor_tags": ["sour", "citrus"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "lime_juice",
+      "name": {"en": "Fresh lime juice", "ko": "생라임즙"},
+      "category": "juice",
+      "abv_fraction": 0,
+      "flavor_tags": ["sour", "citrus"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "simple_syrup",
+      "name": {"en": "Simple syrup", "ko": "심플 시럽"},
+      "category": "syrup",
+      "abv_fraction": 0,
+      "flavor_tags": ["sweet"],
+      "provenance": "T012 fixture; 1:1 sugar and water by volume."
+    },
+    {
+      "ingredient_id": "honey_syrup",
+      "name": {"en": "Honey syrup", "ko": "꿀 시럽"},
+      "category": "syrup",
+      "abv_fraction": 0,
+      "flavor_tags": ["sweet", "floral"],
+      "provenance": "T012 fixture; 1:1 honey and warm water by volume."
+    },
+    {
+      "ingredient_id": "soda_water",
+      "name": {"en": "Soda water", "ko": "탄산수"},
+      "category": "mixer",
+      "abv_fraction": 0,
+      "flavor_tags": ["refreshing"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "lemon_twist",
+      "name": {"en": "Lemon twist", "ko": "레몬 트위스트"},
+      "category": "garnish",
+      "abv_fraction": 0,
+      "flavor_tags": ["citrus"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "orange_twist",
+      "name": {"en": "Orange twist", "ko": "오렌지 트위스트"},
+      "category": "garnish",
+      "abv_fraction": 0,
+      "flavor_tags": ["citrus"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "lime_wedge",
+      "name": {"en": "Lime wedge", "ko": "라임 웨지"},
+      "category": "garnish",
+      "abv_fraction": 0,
+      "flavor_tags": ["citrus"],
+      "provenance": "T012 fixture."
+    },
+    {
+      "ingredient_id": "cocktail_cherry",
+      "name": {"en": "Cocktail cherry", "ko": "칵테일 체리"},
+      "category": "garnish",
+      "abv_fraction": 0,
+      "flavor_tags": ["sweet", "fruity"],
+      "provenance": "T012 fixture."
+    }
+  ]
+}

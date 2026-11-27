@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "characters": [
+    {
+      "character_id": "margot_hale",
+      "name": {"en": "Margot Hale", "ko": "마고 헤일"},
+      "age_years": 31,
+      "appearance": "Adult woman with dark wavy bobbed hair, a burgundy dress, a double pearl necklace, gold drop earrings and a beauty mark. Flat-color Western cartoon.",
+      "personality": ["warm but guarded", "quick wit", "notices small details"],
+      "voice": "Light and teasing at first; careful and precise once the talk turns serious.",
+      "stable_facts": [
+        "Works the switchboard at a downtown hotel.",
+        "Sews her own dresses."
+      ],
+      "private_facts": [
+        "Has saved enough to rent a small dress shop but is afraid to leave a steady job."
+      ],
+      "initial_revealed_facts": [
+        "Has just finished a double shift."
+      ],
+      "preferences": {
+        "likes": ["citrus", "sweet"],
+        "dislikes": ["bitter"],
+        "favorite_spirits": ["gin"]
+      },
+      "opening": {
+        "en": "Something with gin, please. Bright, not bitter. It's been a long day.",
+        "ko": "진으로 부탁해요. 상큼하게, 쓴맛은 빼고요. 오늘 하루가 길었거든요."
+      },
+      "portrait_id": "character_test_patron_neutral",
+      "provenance": "Provisional authored guest (T012), written to match the user's temporary patron art. Name, age and story are proposals for the user to review."
+    }
+  ]
+}

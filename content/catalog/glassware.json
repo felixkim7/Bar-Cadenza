@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "glasses": [
+    {
+      "glass_id": "coupe",
+      "name": {"en": "Coupe", "ko": "쿠프 잔"},
+      "capacity_ul": 180000,
+      "provenance": "T012 fixture; typical capacity, glasses vary."
+    },
+    {
+      "glass_id": "rocks",
+      "name": {"en": "Rocks glass", "ko": "록 글라스"},
+      "capacity_ul": 300000,
+      "provenance": "T012 fixture (old fashioned glass); typical capacity, glasses vary."
+    },
+    {
+      "glass_id": "highball",
+      "name": {"en": "Highball glass", "ko": "하이볼 잔"},
+      "capacity_ul": 350000,
+      "provenance": "T012 fixture; typical capacity, glasses vary."
+    }
+  ]
+}

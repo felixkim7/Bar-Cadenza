@@ -6,7 +6,7 @@ import pygame
 import pytest
 
 from bar_cadenza.app.assets import load_manifest
-from bar_cadenza.app.main import LOGICAL_SIZE, MANIFEST, App, load_strings
+from bar_cadenza.app.main import LOGICAL_SIZE, MANIFEST, App, load_catalogue, load_strings
 from bar_cadenza.app.paths import resource_root
 
 
@@ -18,6 +18,6 @@ def new_app(monkeypatch, tmp_path):
     pygame.font.init()
     screen = pygame.display.set_mode(LOGICAL_SIZE)
     root = resource_root()
-    manifest = load_manifest(root / MANIFEST)
-    yield App(screen, load_strings(root), root, manifest, tmp_path / "saves")
+    manifest, catalogue = load_manifest(root / MANIFEST), load_catalogue(root)
+    yield App(screen, load_strings(root), root, manifest, catalogue, tmp_path / "saves")
     pygame.display.quit()

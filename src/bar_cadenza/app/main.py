@@ -16,6 +16,7 @@ import pygame
 from bar_cadenza.app.assets import AssetError, AssetStore, Manifest, load_manifest
 from bar_cadenza.app.clock import NS_PER_S, SimClock
 from bar_cadenza.app.paths import resource_root, user_data_dir
+from bar_cadenza.domain.catalogue import Catalogue, ContentError, build_catalogue
 from bar_cadenza.domain.session import LANGUAGES, Language, Session
 from bar_cadenza.persistence.saves import (
     SaveError,
@@ -31,6 +32,7 @@ log = logging.getLogger(__name__)
 LOGICAL_SIZE = (1280, 720)  # B007: every scene draws in these logical pixels
 FONT = "assets/fonts/NanumGothic-Regular.ttf"
 MANIFEST = "assets/manifest.json"
+CONTENT_DIRS = ("content/catalog", "content/characters")  # every *.json file is content
 # O007 (T009): SDL settings read at pygame.init()/set_mode(), measured by window capture.
 DISPLAY_HINTS = {
     "SDL_IME_SHOW_UI": "1",  # native candidate list (e.g. Hanja)
@@ -66,6 +68,22 @@ def load_strings(root: Path) -> dict[str, dict[str, str]]:
     return strings
 
 
+def load_catalogue(root: Path) -> Catalogue:
+    """Validate all authored content before any shift starts (ARCHITECTURE). A new file is
+    picked up without code changes."""
+    paths = [p for folder in CONTENT_DIRS for p in sorted((root / folder).glob("*.json"))]
+    try:
+        files = {p.relative_to(root).as_posix(): p.read_bytes() for p in paths}
+        catalogue = build_catalogue(files)
+    except OSError as exc:
+        raise StartupError(f"Cannot read content: {exc}") from exc
+    except ContentError as exc:
+        raise StartupError(f"Invalid content:\n{exc}") from exc
+    if not (catalogue.recipes and catalogue.characters):
+        raise StartupError(f"No recipes or guests found in {', '.join(CONTENT_DIRS)}")
+    return catalogue
+
+
 def open_window(title: str) -> pygame.Surface:
     """Logical 1280×720 canvas scaled to fill a resizable window, with bars only on the
     axis whose ratio differs (O007). Call after setting DISPLAY_HINTS and pygame.init()."""
@@ -85,9 +103,15 @@ class App:
     without a stall."""
 
     def __init__(
-        self, screen: pygame.Surface, strings: dict, root: Path, manifest: Manifest, saves: Path
+        self,
+        screen: pygame.Surface,
+        strings: dict,
+        root: Path,
+        manifest: Manifest,
+        catalogue: Catalogue,
+        saves: Path,
     ):
-        self.screen, self.strings = screen, strings
+        self.screen, self.strings, self.catalogue = screen, strings, catalogue
         self.font = pygame.font.Font(root / FONT, 28)
         self.title_font = pygame.font.Font(root / FONT, 44)
         self.small_font = pygame.font.Font(root / FONT, 22)
@@ -176,6 +200,7 @@ def run(max_seconds: float | None = None) -> int:
     try:
         strings = load_strings(root)
         manifest = load_manifest(root / MANIFEST)
+        catalogue = load_catalogue(root)
     except (StartupError, AssetError) as exc:
         _report_startup_error(str(exc))
         return 1
@@ -185,7 +210,7 @@ def run(max_seconds: float | None = None) -> int:
     try:
         screen = open_window(strings["en"]["app.title"])
         pygame.key.set_repeat(500, 33)  # held keys repeat like Windows (D021)
-        app = App(screen, strings, root, manifest, user_data_dir() / "saves")
+        app = App(screen, strings, root, manifest, catalogue, user_data_dir() / "saves")
         for asset in manifest.assets:  # load and scale once, before the clock starts
             app.assets.image(asset.asset_id)
         limiter = pygame.time.Clock()

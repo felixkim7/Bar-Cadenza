@@ -10,6 +10,7 @@ onto each hit region and checks that SDL's window→logical mapping lands on tha
 import argparse
 import ctypes
 import ctypes.wintypes
+import os
 import sys
 import time
 
@@ -17,7 +18,7 @@ import pygame
 
 from bar_cadenza.app.assets import AssetStore, load_manifest
 from bar_cadenza.app.clock import NS_PER_S
-from bar_cadenza.app.main import FONT, LOGICAL_SIZE
+from bar_cadenza.app.main import DISPLAY_HINTS, FONT, LOGICAL_SIZE, MANIFEST, open_window
 from bar_cadenza.app.paths import resource_root
 from bar_cadenza.ui.palette import BALSAMICO, CHAMPAGNE, WHISKEY_SOUR
 
@@ -25,12 +26,12 @@ SCENE = "t008_layer_test"
 
 
 def logical_to_window(pos, window_size, logical_size=LOGICAL_SIZE) -> tuple[float, float]:
-    """Where pygame-ce's SCALED mode draws a logical point: an integer scale (measured in
-    T008 by screen capture — the picture stays 1× until the window is twice the size),
-    centred, with bars on every side that has room."""
-    scale = max(1, min(window_size[0] // logical_size[0], window_size[1] // logical_size[1]))
-    ox = (window_size[0] - logical_size[0] * scale) / 2
-    oy = (window_size[1] - logical_size[1] * scale) / 2
+    """Where the window shows a logical point under DISPLAY_HINTS (O007): one fractional
+    scale that fits the whole canvas, centred, with bars on the axis left over (SDL2's
+    logical-size viewport; measured by window capture in T009)."""
+    (w, h), (lw, lh) = window_size, logical_size
+    scale = min(w / lw, h / lh)
+    ox, oy = (w - int(lw * scale)) // 2, (h - int(lh * scale)) // 2
     return pos[0] * scale + ox, pos[1] * scale + oy
 
 
@@ -85,11 +86,12 @@ def _verify_pointer(store: AssetStore) -> list[str]:
 def run(max_seconds: float | None = None, verify_pointer: bool = False) -> list[str]:
     """Returns pointer-mapping failures (empty when not verifying)."""
     root = resource_root()
-    manifest = load_manifest(root / "assets/manifest.json")
+    manifest = load_manifest(root / MANIFEST)
+    for name, value in DISPLAY_HINTS.items():
+        os.environ.setdefault(name, value)
     pygame.init()
     try:
-        screen = pygame.display.set_mode(LOGICAL_SIZE, pygame.SCALED | pygame.RESIZABLE)
-        pygame.display.set_caption("Bar Cadenza — T008 layered asset test")
+        screen = open_window("Bar Cadenza — T008 layered asset test")
         small = pygame.font.Font(root / FONT, 18)
         store = AssetStore(root / "assets", manifest, small)
         failures: list[str] = []

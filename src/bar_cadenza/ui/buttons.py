@@ -57,12 +57,15 @@ class ButtonList:
         return next((i for i, r in enumerate(self.rects()) if r.collidepoint(pos)), None)
 
     def draw(self, screen: pygame.Surface, font: pygame.font.Font, active: bool = True) -> None:
-        """`active` False hides the focus ring while keyboard focus is elsewhere."""
+        """`active` False hides the keyboard marker while keyboard focus is elsewhere; the
+        button under the pointer still lights up, so it reads as clickable."""
+        mouse = pygame.mouse.get_pos()
         for i, (rect, (_, label)) in enumerate(zip(self.rects(), self.items)):
             focused = active and i == self.focus
+            lit = focused or rect.collidepoint(mouse)
             pygame.draw.rect(screen, BURNT_COFFEE, rect, border_radius=6)
-            border = WHISKEY_SOUR if focused else HONEY_GARLIC
-            pygame.draw.rect(screen, border, rect, 4 if focused else 2, border_radius=6)
+            border = WHISKEY_SOUR if lit else HONEY_GARLIC
+            pygame.draw.rect(screen, border, rect, 4 if lit else 2, border_radius=6)
             text = font.render(label, True, CHAMPAGNE)
             screen.blit(text, text.get_rect(center=rect.center))
             if focused:

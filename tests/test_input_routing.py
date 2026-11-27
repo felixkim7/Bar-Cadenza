@@ -4,8 +4,6 @@ import pygame
 import pytest
 
 from bar_cadenza.app.clock import NS_PER_S
-from bar_cadenza.app.main import FONT, LOGICAL_SIZE, App, load_strings
-from bar_cadenza.app.paths import resource_root
 from bar_cadenza.domain.encounter import DrinkState, InputContext, Talk
 from bar_cadenza.domain.session import Session
 from bar_cadenza.scenes.shell import Bar, MainMenu
@@ -103,9 +101,8 @@ def test_leaving_the_field_keeps_the_composition_in_the_draft(router):
 
 
 @pytest.fixture
-def bar():
-    pygame.font.init()
-    app = App(pygame.Surface(LOGICAL_SIZE), load_strings(resource_root()), resource_root() / FONT)
+def bar(new_app):
+    app = new_app
     app.session = Session(language="ko")
     app.go(Bar(app))
     return app
@@ -119,6 +116,7 @@ def click(app, action):
 def test_time_runs_while_typing_stirring_and_waiting_and_talk_spans_mixing_and_serving(bar):
     scene = bar.scene
     click(bar, "add")
+    assert scene.notice == "bar.added"  # the click shows a result even with F3 off
     bar.frame([down(scene.stir_rect.center)], 0)
     t0 = bar.sim.sim_ns
     for ch in "잔":
@@ -133,7 +131,7 @@ def test_time_runs_while_typing_stirring_and_waiting_and_talk_spans_mixing_and_s
     assert bar.sim.sim_ns - t0 == 1_800 * MS
     assert scene.stirred_ns == 1_800 * MS and scene.router.captured is None
     click(bar, "serve")
-    assert scene.encounter.drinks[-1].state is DrinkState.SERVED
+    assert scene.encounter.drinks[-1].state is DrinkState.SERVED and scene.notice == "bar.served"
     bar.frame([text("또"), key(pygame.K_RETURN)], 0)  # talk continues after serving
     assert scene.encounter.talk is Talk.REQUEST_PENDING and scene.you == "또"
 

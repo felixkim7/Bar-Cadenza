@@ -12,13 +12,25 @@ from pathlib import Path
 
 import pygame
 
+from bar_cadenza.app.assets import AssetError, AssetStore, Manifest, load_manifest
 from bar_cadenza.app.clock import NS_PER_S, SimClock
 from bar_cadenza.app.paths import resource_root
 from bar_cadenza.domain.session import LANGUAGES, Session
 from bar_cadenza.scenes.shell import MainMenu
 
-LOGICAL_SIZE = (1280, 720)  # B007
+LOGICAL_SIZE = (1280, 720)  # B007: every scene draws in these logical pixels
 FONT = "assets/fonts/NanumGothic-Regular.ttf"
+MANIFEST = "assets/manifest.json"
+# O007 (T009): SDL settings read at pygame.init()/set_mode(), measured by window capture.
+DISPLAY_HINTS = {
+    "SDL_IME_SHOW_UI": "1",  # native candidate list (e.g. Hanja)
+    "SDL_WINDOWS_DPI_AWARENESS": "permonitorv2",  # SDL scales once; Windows does not stretch again
+    # ponytail: pygame-ce reads this literal hint name to scale SCALED windows fractionally
+    # (fill the window) instead of in whole steps; re-measure after a pygame-ce upgrade.
+    "SDL_HINT_RENDER_SCALE_QUALITY": "1",
+    "PYGAME_FORCE_SCALE": "photo",  # smooth filtering for that scale
+}
+WINDOW_SHARE = 0.8  # opening window: 80% of the desktop, keeping 16:9
 # SDL2 on Windows freezes the loop while the window is dragged or resized; these events
 # arrive in the first frame after, whose gap is then dropped (D022).
 STALL_EVENTS = {pygame.WINDOWMOVED, pygame.WINDOWSIZECHANGED}
@@ -44,14 +56,29 @@ def load_strings(root: Path) -> dict[str, dict[str, str]]:
     return strings
 
 
-class App:
-    """Owns the session, the simulation clock and the active scene (main thread only)."""
+def open_window(title: str) -> pygame.Surface:
+    """Logical 1280×720 canvas scaled to fill a resizable window, with bars only on the
+    axis whose ratio differs (O007). Call after setting DISPLAY_HINTS and pygame.init()."""
+    screen = pygame.display.set_mode(LOGICAL_SIZE, pygame.SCALED | pygame.RESIZABLE)
+    pygame.display.set_caption(title)
+    (dw, dh), (lw, lh) = pygame.display.get_desktop_sizes()[0], LOGICAL_SIZE
+    scale = WINDOW_SHARE * min(dw / lw, dh / lh)
+    window = pygame.Window.from_display_module()
+    window.size = (round(lw * scale), round(lh * scale))
+    window.position = pygame.WINDOWPOS_CENTERED
+    return screen
 
-    def __init__(self, screen: pygame.Surface, strings: dict, font_path: Path) -> None:
+
+class App:
+    """Owns the session, the simulation clock, the assets and the active scene (main thread
+    only). Assets load on first use; run() preloads them so the bar opens without a stall."""
+
+    def __init__(self, screen: pygame.Surface, strings: dict, root: Path, manifest: Manifest):
         self.screen, self.strings = screen, strings
-        self.font = pygame.font.Font(font_path, 28)
-        self.title_font = pygame.font.Font(font_path, 44)
-        self.small_font = pygame.font.Font(font_path, 22)
+        self.font = pygame.font.Font(root / FONT, 28)
+        self.title_font = pygame.font.Font(root / FONT, 44)
+        self.small_font = pygame.font.Font(root / FONT, 22)
+        self.assets = AssetStore(root / "assets", manifest, self.small_font)
         self.sim = SimClock()
         self.session: Session | None = None
         self.running = True
@@ -104,16 +131,19 @@ def run(max_seconds: float | None = None) -> int:
     root = resource_root()
     try:
         strings = load_strings(root)
-    except StartupError as exc:
+        manifest = load_manifest(root / MANIFEST)
+    except (StartupError, AssetError) as exc:
         _report_startup_error(str(exc))
         return 1
-    os.environ.setdefault("SDL_IME_SHOW_UI", "1")  # native candidate list (e.g. Hanja)
+    for name, value in DISPLAY_HINTS.items():
+        os.environ.setdefault(name, value)
     pygame.init()
     try:
-        screen = pygame.display.set_mode(LOGICAL_SIZE, pygame.SCALED | pygame.RESIZABLE)
-        pygame.display.set_caption(strings["en"]["app.title"])
+        screen = open_window(strings["en"]["app.title"])
         pygame.key.set_repeat(500, 33)  # held keys repeat like Windows (D021)
-        app = App(screen, strings, root / FONT)
+        app = App(screen, strings, root, manifest)
+        for asset in manifest.assets:  # load and scale once, before the clock starts
+            app.assets.image(asset.asset_id)
         limiter = pygame.time.Clock()
         start = last = time.perf_counter_ns()
         while app.running:

@@ -2,6 +2,16 @@
 
 All schemas below are design contracts to implement and version in T010/T011. Example JSON under content/examples is illustrative, not a production catalogue. Validate IDs, references, enum values, bounds and unknown fields before using external data.
 
+Implemented in T010:
+- **`domain/catalogue.py`:**
+  - authored records: IngredientDefinition, GlassDefinition, RecipeDefinition and CharacterProfile;
+  - the versioned content-file shape;
+  - the supported Method/Technique sets and the Flavor vocabulary;
+  - `build_catalogue`, which checks references across files.
+- **`domain/encounter.py`:**
+  - Order and PreparationEvent;
+  - PreparedDrink, which is `encounter.Drink`: its state plus observed events.
+
 ## Common rules
 Use stable ASCII snake_case IDs. Display strings never act as primary keys. Use locale keys `ko` and `en`. Store time durations in milliseconds. Store money as integer minor units after currency O009 is decided. Use nonnegative integer microliters for measured liquid quantities (1 ml = 1,000 µl), rendering ml to the player; continuous pours accumulate subunit remainder rather than losing it each frame. ABV is a fraction in [0,1]. Keep authored targets separate from observed actions.
 
@@ -9,7 +19,8 @@ Use stable ASCII snake_case IDs. Display strings never act as primary keys. Use 
 | Record | Fields and invariant |
 |---|---|
 | IngredientDefinition | ingredient_id, localized name, category, abv_fraction, flavor_tags, asset_id, provenance; no gameplay state |
-| RecipeDefinition | recipe_id, localized name, ingredient quantities, steps, method, glass_id, ice/garnish, unlock requirements, variant/source; every reference resolves |
+| GlassDefinition | glass_id, localized name, capacity_ul, asset_id, provenance; a recipe's volume must fit its glass |
+| RecipeDefinition | recipe_id, localized name, ingredient quantities, steps, method, glass_id, ice/garnish, unlock requirements, variant_of (the house recipe it varies)/source; every reference resolves |
 | Order | order_id, encounter_id, named/recommendation, recipe_id if named, revealed preferences, explicit adjustments; unavailable orders rejected or negotiated |
 | PreparedDrink | drink_id, ingredient additions, vessel_id, action events, ice, dilution estimate, garnish, served_at; append observations, never copy recipe targets as actuals |
 | PreparationEvent | event_id, action_type, start/end times, observed amount/rotation/intensity metrics; no negative durations or quantities |

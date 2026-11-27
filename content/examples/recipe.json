@@ -1,43 +1,43 @@
 {
   "schema_version": 1,
   "example_only": true,
-  "recipe_id": "daiquiri_house_example",
-  "name": {
-    "en": "Daiquiri — example house variant",
-    "ko": "다이키리 — 예시 하우스 레시피"
-  },
-  "ingredients": [
+  "recipes": [
     {
-      "ingredient_id": "white_rum",
-      "volume_ul": 60000
-    },
-    {
-      "ingredient_id": "lime_juice",
-      "volume_ul": 25000
-    },
-    {
-      "ingredient_id": "simple_syrup",
-      "volume_ul": 15000
+      "recipe_id": "daiquiri_house_example",
+      "name": {
+        "en": "Daiquiri — example house variant",
+        "ko": "다이키리 — 예시 하우스 레시피"
+      },
+      "ingredients": [
+        {
+          "ingredient_id": "white_rum",
+          "volume_ul": 60000
+        },
+        {
+          "ingredient_id": "lime_juice",
+          "volume_ul": 25000
+        },
+        {
+          "ingredient_id": "simple_syrup",
+          "volume_ul": 15000
+        }
+      ],
+      "method": "shake",
+      "steps": [
+        "measure",
+        "add_ice",
+        "shake",
+        "strain",
+        "serve"
+      ],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": null,
+      "flavor_tags": [
+        "sour",
+        "citrus"
+      ],
+      "provenance": "Illustrative game fixture, not a selected authoritative recipe or historically validated specification."
     }
-  ],
-  "method": "shake",
-  "steps": [
-    "measure",
-    "add_ice",
-    "shake",
-    "strain",
-    "serve"
-  ],
-  "glass_id": "coupe",
-  "ice": "mixing_only",
-  "garnish_id": null,
-  "flavor_tags": [
-    "sour",
-    "citrus"
-  ],
-  "required_techniques": [
-    "shake",
-    "strain"
-  ],
-  "provenance": "Illustrative game fixture, not a selected authoritative recipe or historically validated specification."
+  ]
 }

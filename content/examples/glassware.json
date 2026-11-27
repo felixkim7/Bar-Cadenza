@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "glasses": [
+    {
+      "glass_id": "coupe",
+      "name": {
+        "en": "Coupe",
+        "ko": "쿠프 잔"
+      },
+      "capacity_ul": 180000,
+      "asset_id": "prop_glass_coupe",
+      "provenance": "Illustrative specification fixture; capacity to confirm for production."
+    }
+  ]
+}

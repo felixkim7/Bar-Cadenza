@@ -95,7 +95,11 @@ BAD = {
     ),
     "method without its step": (
         lambda d: recipe(d).update(method="stir"),
-        "method 'stir' needs mixing steps ['stir'], got ['shake']",
+        "method 'stir' needs a 'stir' step",
+    ),
+    "built drink that is shaken": (
+        lambda d: recipe(d).update(method="build"),
+        "a built drink is not shaken",
     ),
     "unknown glass": (
         lambda d: recipe(d).update(glass_id="tumbler"),

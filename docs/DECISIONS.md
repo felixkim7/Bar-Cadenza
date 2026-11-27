@@ -55,7 +55,7 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | O001 | Submission requirements (deliverable format); deadline is confirmed in D020 | T046 | Ask before T046; keep dependency order |
 | O002 | First AI provider, model, key ownership and spending cap | T004 live branch / T025 | Mock provider; zero paid calls |
 | O003 | Final catalogue source and target size | T039 | Curated fixtures and importer contract |
-| O004 | Strict history vs period-inspired fiction; treatment of later cocktails, brands and topics (real brands are allowed, D026; whether they must be period-correct is open) | T012 / T039 | Label examples provisional; avoid modern technology in stories |
+| O004 | Strict history vs period-inspired fiction; treatment of later cocktails, brands and topics (real brands are allowed, D026; whether they must be period-correct is open) | T012 / T039 | Label examples provisional; avoid modern technology in stories. The T012 fixtures use only drinks and brands commonly dated before 1935, so they fit either policy. Their provenance gives the commonly cited dating, not checked against primary sources. |
 | O005 | Authored/generated cast balance and whether runtime story generation is mandatory for submission | T034 | Plan generation module without counting it as confirmed scope |
 | O006 | Runtime image generation vs prepared/modular portraits | T035 | Prepared portrait pool supplied by the user (D023) |
 | O007 | Still open: any exact palette values beyond the five named roles. The visual baseline and light direction were approved as D024 (T009); resolution, scaling and asset sizes are baseline B012. | T041 | The five named palette roles only; no invented approved colors |

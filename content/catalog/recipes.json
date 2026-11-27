@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "recipes": [
+    {
+      "recipe_id": "bees_knees",
+      "name": {"en": "Bee's Knees", "ko": "비즈 니즈"},
+      "ingredients": [
+        {"ingredient_id": "gin", "volume_ul": 60000},
+        {"ingredient_id": "lemon_juice", "volume_ul": 22500},
+        {"ingredient_id": "honey_syrup", "volume_ul": 22500}
+      ],
+      "method": "shake",
+      "steps": ["measure", "add_ice", "shake", "strain", "garnish", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": "lemon_twist",
+      "flavor_tags": ["sweet", "citrus", "floral"],
+      "unlock_level": 1,
+      "provenance": "Provisional house spec (T012) after commonly published classic proportions. Commonly dated to the Prohibition era; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "daiquiri",
+      "name": {"en": "Daiquiri", "ko": "다이키리"},
+      "ingredients": [
+        {"ingredient_id": "white_rum", "volume_ul": 60000},
+        {"ingredient_id": "lime_juice", "volume_ul": 25000},
+        {"ingredient_id": "simple_syrup", "volume_ul": 15000}
+      ],
+      "method": "shake",
+      "steps": ["measure", "add_ice", "shake", "strain", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "flavor_tags": ["sour", "citrus", "refreshing", "light"],
+      "unlock_level": 1,
+      "provenance": "Provisional house spec (T012) after commonly published classic proportions. Commonly dated to the early 1900s; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "sidecar",
+      "name": {"en": "Sidecar", "ko": "사이드카"},
+      "ingredients": [
+        {"ingredient_id": "cognac", "volume_ul": 50000},
+        {"ingredient_id": "orange_liqueur", "volume_ul": 25000},
+        {"ingredient_id": "lemon_juice", "volume_ul": 20000}
+      ],
+      "method": "shake",
+      "steps": ["measure", "add_ice", "shake", "strain", "garnish", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": "orange_twist",
+      "flavor_tags": ["citrus", "fruity", "sour", "strong"],
+      "unlock_level": 3,
+      "provenance": "Provisional house spec (T012) after commonly published classic proportions. Commonly dated to around 1920; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "dry_martini",
+      "name": {"en": "Dry Martini", "ko": "드라이 마티니"},
+      "ingredients": [
+        {"ingredient_id": "gin", "volume_ul": 60000},
+        {"ingredient_id": "dry_vermouth", "volume_ul": 15000},
+        {"ingredient_id": "orange_bitters", "volume_ul": 1000}
+      ],
+      "method": "stir",
+      "steps": ["measure", "add_ice", "stir", "strain", "garnish", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": "lemon_twist",
+      "flavor_tags": ["dry", "strong", "herbal"],
+      "unlock_level": 2,
+      "provenance": "Provisional house spec (T012) after commonly published classic proportions; a dash of bitters is counted as 1 ml. Commonly dated to the early 1900s; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "manhattan",
+      "name": {"en": "Manhattan", "ko": "맨해튼"},
+      "ingredients": [
+        {"ingredient_id": "rye_whiskey", "volume_ul": 60000},
+        {"ingredient_id": "sweet_vermouth", "volume_ul": 30000},
+        {"ingredient_id": "angostura_bitters", "volume_ul": 2000}
+      ],
+      "method": "stir",
+      "steps": ["measure", "add_ice", "stir", "strain", "garnish", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": "cocktail_cherry",
+      "flavor_tags": ["strong", "sweet", "spicy"],
+      "unlock_level": 2,
+      "provenance": "Provisional house spec (T012) after commonly published classic proportions; two dashes of bitters are counted as 2 ml. Commonly dated to the 1880s; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "perfect_manhattan",
+      "name": {"en": "Perfect Manhattan", "ko": "퍼펙트 맨해튼"},
+      "ingredients": [
+        {"ingredient_id": "rye_whiskey", "volume_ul": 60000},
+        {"ingredient_id": "sweet_vermouth", "volume_ul": 15000},
+        {"ingredient_id": "dry_vermouth", "volume_ul": 15000},
+        {"ingredient_id": "angostura_bitters", "volume_ul": 2000}
+      ],
+      "method": "stir",
+      "steps": ["measure", "add_ice", "stir", "strain", "garnish", "serve"],
+      "glass_id": "coupe",
+      "ice": "mixing_only",
+      "garnish_id": "lemon_twist",
+      "flavor_tags": ["strong", "dry", "spicy"],
+      "unlock_level": 2,
+      "variant_of": "manhattan",
+      "provenance": "Provisional variant (T012): the vermouth split between sweet and dry. Commonly dated to the early 1900s; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "old_fashioned",
+      "name": {"en": "Old Fashioned", "ko": "올드 패션드"},
+      "ingredients": [
+        {"ingredient_id": "rye_whiskey", "volume_ul": 60000},
+        {"ingredient_id": "simple_syrup", "volume_ul": 7500},
+        {"ingredient_id": "angostura_bitters", "volume_ul": 2000}
+      ],
+      "method": "build",
+      "steps": ["measure", "add_ice", "stir", "garnish", "serve"],
+      "glass_id": "rocks",
+      "ice": "cubes",
+      "garnish_id": "orange_twist",
+      "flavor_tags": ["strong", "sweet", "spicy"],
+      "unlock_level": 1,
+      "provenance": "Provisional house spec (T012): built and stirred in the glass, syrup in place of a sugar cube. Commonly dated to the 1800s; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "negroni",
+      "name": {"en": "Negroni", "ko": "네그로니"},
+      "ingredients": [
+        {"ingredient_id": "gin", "volume_ul": 30000},
+        {"ingredient_id": "campari", "volume_ul": 30000},
+        {"ingredient_id": "sweet_vermouth", "volume_ul": 30000}
+      ],
+      "method": "build",
+      "steps": ["measure", "add_ice", "stir", "garnish", "serve"],
+      "glass_id": "rocks",
+      "ice": "cubes",
+      "garnish_id": "orange_twist",
+      "flavor_tags": ["bitter", "herbal", "sweet", "strong"],
+      "unlock_level": 3,
+      "provenance": "Provisional house spec (T012): equal parts, built over ice. Commonly dated to around 1919; not checked against primary sources (O004)."
+    },
+    {
+      "recipe_id": "gin_rickey",
+      "name": {"en": "Gin Rickey", "ko": "진 리키"},
+      "ingredients": [
+        {"ingredient_id": "gin", "volume_ul": 60000},
+        {"ingredient_id": "lime_juice", "volume_ul": 15000},
+        {"ingredient_id": "soda_water", "volume_ul": 120000}
+      ],
+      "method": "build",
+      "steps": ["add_ice", "measure", "garnish", "serve"],
+      "glass_id": "highball",
+      "ice": "cubes",
+      "garnish_id": "lime_wedge",
+      "flavor_tags": ["sour", "citrus", "refreshing", "dry"],
+      "unlock_level": 1,
+      "provenance": "Provisional house spec (T012): built over ice and topped with soda. Commonly dated to the 1880s; not checked against primary sources (O004)."
+    }
+  ]
+}

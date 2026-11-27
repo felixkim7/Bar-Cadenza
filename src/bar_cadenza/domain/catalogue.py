@@ -100,10 +100,12 @@ class RecipeDefinition(Record):
         ids = [item.ingredient_id for item in self.ingredients]
         if len(set(ids)) != len(ids):
             raise ValueError("lists an ingredient twice; combine the quantities")
-        mixing = sorted(str(t) for t in {Technique.SHAKE, Technique.STIR} & set(self.steps))
-        expected = [] if self.method is Method.BUILD else [str(self.method)]
-        if mixing != expected:
-            raise ValueError(f"method '{self.method}' needs mixing steps {expected}, got {mixing}")
+        # Shaken and stirred drinks need their mixing step. A built drink is made in the glass
+        # and may be stirred there (Old Fashioned), but never shaken.
+        if self.method is not Method.BUILD and Technique(self.method) not in self.steps:
+            raise ValueError(f"method '{self.method}' needs a '{self.method}' step")
+        if self.method is Method.BUILD and Technique.SHAKE in self.steps:
+            raise ValueError("a built drink is not shaken; use method 'shake'")
         if (self.garnish_id is None) == (Technique.GARNISH in self.steps):
             raise ValueError("a garnish_id and a garnish step go together")
         return self

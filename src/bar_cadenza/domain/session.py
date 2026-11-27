@@ -1,4 +1,4 @@
-"""The game being played. Saving and loading arrive in T011."""
+"""The game being played. persistence/saves.py stores it at shift boundaries (T011)."""
 
 from dataclasses import dataclass
 from typing import Literal

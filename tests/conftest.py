@@ -11,11 +11,13 @@ from bar_cadenza.app.paths import resource_root
 
 
 @pytest.fixture
-def new_app(monkeypatch):
+def new_app(monkeypatch, tmp_path):
+    """Saves go to a temporary folder, never the player's own."""
     monkeypatch.setitem(os.environ, "SDL_VIDEODRIVER", "dummy")
     pygame.display.init()
     pygame.font.init()
     screen = pygame.display.set_mode(LOGICAL_SIZE)
     root = resource_root()
-    yield App(screen, load_strings(root), root, load_manifest(root / MANIFEST))
+    manifest = load_manifest(root / MANIFEST)
+    yield App(screen, load_strings(root), root, manifest, tmp_path / "saves")
     pygame.display.quit()

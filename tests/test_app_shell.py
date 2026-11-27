@@ -8,6 +8,8 @@ import pytest
 from bar_cadenza.app import main as app_main
 from bar_cadenza.app.main import App, StartupError, load_strings
 from bar_cadenza.app.paths import resource_root
+from bar_cadenza.domain.session import Session
+from bar_cadenza.persistence.saves import load_save
 from bar_cadenza.scenes.shell import Bar, LanguageSelect, MainMenu, PreShift, Results
 
 E = pygame.event.Event
@@ -126,3 +128,39 @@ def test_run_headless_starts_and_exits_cleanly(monkeypatch):
     monkeypatch.setitem(os.environ, "SDL_VIDEODRIVER", "dummy")
     assert app_main.run(max_seconds=0.3) == 0
     assert not pygame.display.get_init()
+
+
+@pytest.mark.parametrize("lang", ["ko", "en"])
+def test_shift_boundaries_save_and_continue_restores_language_and_shift(app, lang):
+    click(app, "new_game")
+    click(app, lang)
+    assert app.scene.notice == "save.done" and load_save(app.save_path) == Session(lang, 1)
+    click(app, "open")
+    click(app, "close")  # the shift is over: a reload starts shift 2
+    assert app.scene.notice == "save.done" and load_save(app.save_path) == Session(lang, 2)
+    click(app, "menu")
+    click(app, "continue")
+    assert isinstance(app.scene, PreShift) and app.session == Session(lang, 2)
+
+
+def test_continue_reports_an_unreadable_save_and_leaves_it(app):
+    app.saves.mkdir()
+    damaged = app.saves / "save-damaged.sqlite3"
+    damaged.write_bytes(b"not a database")
+    click(app, "continue")
+    assert isinstance(app.scene, MainMenu) and app.scene.notice == "save.unreadable"
+    assert damaged.read_bytes() == b"not a database"
+
+
+def test_a_failed_save_says_so_and_the_game_goes_on(app):
+    app.saves.write_text("a file where the saves folder should be")
+    click(app, "new_game")
+    click(app, "ko")
+    assert isinstance(app.scene, PreShift) and app.scene.notice == "save.failed"
+    assert app.save_path is None and app.session == Session("ko", 1)
+
+
+@pytest.mark.parametrize("lang", ["ko", "en"])
+def test_save_notices_fit_the_screen(app, lang):
+    keys = ["save.done", "save.failed", "save.unreadable", "save.newer", "menu.no_save"]
+    assert all(app.small_font.size(app.strings[lang][k])[0] <= 1280 - 32 for k in keys)

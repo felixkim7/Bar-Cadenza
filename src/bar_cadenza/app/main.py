@@ -5,6 +5,7 @@ Run: uv run python -m bar_cadenza [--seconds S]
 
 import argparse
 import json
+import logging
 import os
 import sys
 import time
@@ -14,9 +15,18 @@ import pygame
 
 from bar_cadenza.app.assets import AssetError, AssetStore, Manifest, load_manifest
 from bar_cadenza.app.clock import NS_PER_S, SimClock
-from bar_cadenza.app.paths import resource_root
-from bar_cadenza.domain.session import LANGUAGES, Session
+from bar_cadenza.app.paths import resource_root, user_data_dir
+from bar_cadenza.domain.session import LANGUAGES, Language, Session
+from bar_cadenza.persistence.saves import (
+    SaveError,
+    create_save,
+    latest_save,
+    load_save,
+    write_save,
+)
 from bar_cadenza.scenes.shell import MainMenu
+
+log = logging.getLogger(__name__)
 
 LOGICAL_SIZE = (1280, 720)  # B007: every scene draws in these logical pixels
 FONT = "assets/fonts/NanumGothic-Regular.ttf"
@@ -70,10 +80,13 @@ def open_window(title: str) -> pygame.Surface:
 
 
 class App:
-    """Owns the session, the simulation clock, the assets and the active scene (main thread
-    only). Assets load on first use; run() preloads them so the bar opens without a stall."""
+    """Owns the session and its save file, the simulation clock, the assets and the active
+    scene (main thread only). Assets load on first use; run() preloads them so the bar opens
+    without a stall."""
 
-    def __init__(self, screen: pygame.Surface, strings: dict, root: Path, manifest: Manifest):
+    def __init__(
+        self, screen: pygame.Surface, strings: dict, root: Path, manifest: Manifest, saves: Path
+    ):
         self.screen, self.strings = screen, strings
         self.font = pygame.font.Font(root / FONT, 28)
         self.title_font = pygame.font.Font(root / FONT, 44)
@@ -81,8 +94,39 @@ class App:
         self.assets = AssetStore(root / "assets", manifest, self.small_font)
         self.sim = SimClock()
         self.session: Session | None = None
+        self.saves, self.save_path = saves, None
         self.running = True
         self.scene = MainMenu(self)
+
+    # Saves happen at shift boundaries (DATA_MODELS): when a game starts and when a shift ends.
+    # Each returns the locale key of the notice to show.
+    def new_game(self, language: Language) -> str:
+        self.session, self.save_path = Session(language=language), None
+        return self.save_game(self.session)
+
+    def continue_game(self) -> str | None:
+        """Load the newest save; None on success."""
+        if (path := latest_save(self.saves)) is None:
+            return "menu.no_save"
+        try:
+            self.session = load_save(path)
+        except SaveError as exc:
+            log.warning("cannot load save: %s", exc)
+            return f"save.{exc.reason}"
+        self.save_path = path
+        return None
+
+    def save_game(self, snapshot: Session) -> str:
+        """On failure the game goes on with its progress in memory; it never claims a save."""
+        try:
+            if self.save_path is None:
+                self.save_path = create_save(self.saves, snapshot)
+            else:
+                write_save(self.save_path, snapshot)
+        except SaveError as exc:
+            log.warning("cannot save: %s", exc)
+            return f"save.{exc.reason}"
+        return "save.done"
 
     def t(self, key: str, **values) -> str:
         """String in the session's language."""
@@ -141,7 +185,7 @@ def run(max_seconds: float | None = None) -> int:
     try:
         screen = open_window(strings["en"]["app.title"])
         pygame.key.set_repeat(500, 33)  # held keys repeat like Windows (D021)
-        app = App(screen, strings, root, manifest)
+        app = App(screen, strings, root, manifest, user_data_dir() / "saves")
         for asset in manifest.assets:  # load and scale once, before the clock starts
             app.assets.image(asset.asset_id)
         limiter = pygame.time.Clock()

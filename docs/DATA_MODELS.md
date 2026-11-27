@@ -43,7 +43,13 @@ Use stable ASCII snake_case IDs. Display strings never act as primary keys. Use 
 Rapport dimensions, bounded scores, evidence turn IDs, and explanation in selected language. No money/XP fields. If evidence is missing or evaluator fails, mark assessment pending or unavailable and use documented fallback; do not silently manufacture a precise score.
 
 ## Database proposal
-Tables: saves, character_profiles, character_states, encounters, dialogue_turns, memory_facts, prepared_drinks, evaluations, progression, inventory, ledger_entries, schema_migrations. Use foreign keys and transactions. Profile snapshots must stay available for saved visits even if authored content changes. Store structured event payloads as versioned JSON where useful; avoid dozens of tables for transient animation state.
+Tables: saves, character_profiles, character_states, encounters, dialogue_turns, memory_facts, prepared_drinks, evaluations, progression, inventory, ledger_entries, schema_migrations.
+
+T011 baseline (B013):
+- **File layout:** one SQLite file per save.
+- **Schema version:** held in `PRAGMA user_version` instead of a schema_migrations table.
+- **Tables so far:** `saves` (save_id, language, content_version, created_at, updated_at) and `progress` (save_id, shift).
+- **Growth:** later tasks add tables and columns as appended migrations. Use foreign keys and transactions. Profile snapshots must stay available for saved visits even if authored content changes. Store structured event payloads as versioned JSON where useful; avoid dozens of tables for transient animation state.
 
 ## Save boundaries
 Save at shift boundaries and safe encounter checkpoints. Do not serialize threads, sockets, pending futures or API keys. Persist an interrupted request marker and restart safely without double charging game currency or replaying actions. Completing a visit and paying rewards must be one atomic, idempotent transaction keyed by encounter_id.

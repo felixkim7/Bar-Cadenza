@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "asset_id": "bg_test_room",
+      "file": "backgrounds/test_room.png",
+      "kind": "background",
+      "layer": "room",
+      "display": [1280, 720],
+      "anchor": [0.0, 0.0],
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    },
+    {
+      "asset_id": "character_test_patron_neutral",
+      "file": "characters/test_patron_neutral.png",
+      "kind": "character",
+      "layer": "customer",
+      "display": [400, 500],
+      "anchor": [0.5, 1.0],
+      "hit": [31, 0, 333, 359],
+      "state": "neutral",
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    },
+    {
+      "asset_id": "bg_counter_front",
+      "file": "backgrounds/counter_front.png",
+      "kind": "background",
+      "layer": "counter",
+      "display": [1280, 427],
+      "anchor": [0.5, 1.0],
+      "hit": [0, 166, 1280, 140],
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    },
+    {
+      "asset_id": "prop_jigger_idle",
+      "file": "props/jigger_idle.png",
+      "kind": "prop",
+      "layer": "props",
+      "display": [60, 110],
+      "anchor": [0.5, 1.0],
+      "hit": [0, 0, 60, 110],
+      "state": "idle",
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    }
+  ],
+  "scenes": {
+    "t008_layer_test": [
+      {"asset": "prop_jigger_idle", "at": [820, 560]},
+      {"asset": "bg_counter_front", "at": [640, 720]},
+      {"asset": "character_test_patron_neutral", "at": [640, 600]},
+      {"asset": "bg_test_room", "at": [0, 0]}
+    ]
+  }
+}

@@ -27,6 +27,7 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | D020 | Deadline 2026-12-01. Go as far as possible in dependency order; do not reduce the dev plan or scope (user decision 2026-11-26). |
 | D021 | Chat input: Enter sends at once, including a syllable still being composed; Shift+Enter inserts a line break; held Backspace/Delete/arrows repeat; no composition underline. Supersedes 'composition Enter must not submit' (user decision 2026-11-26, after the T003 IME test). |
 | D022 | Game time measures physical actions (pour duration, shake/stir duration and intensity, ice/dilution) and lets bartending and conversation run at once; it is not a countdown on the whole evening (user statement 2026-11-26). Resulting O008 policy: typing, reading, recipe browsing, busy actions and pending AI never pause time; Esc opens a pause menu (Resume / Main menu) that stops time; losing window focus or minimizing opens the same menu and ends any held action; a window drag/resize stall adds no time; other gaps stay capped at 1 s. |
+| D023 | All artwork and assets (images, character images/portraits, backgrounds, props, icons, animation frames, fonts, audio) are supplied by the user. Claude always asks for each needed asset with its spec and location, and never generates, draws, downloads or otherwise sources assets itself. Code-drawn UI and the runtime missing-asset placeholder are not assets (user decision 2026-11-26). |
 
 ## Engineering baselines
 | ID | Baseline | Revisit when |
@@ -51,8 +52,8 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | O003 | Final catalogue source and target size | T039 | Curated fixtures and importer contract |
 | O004 | Strict history vs period-inspired fiction; treatment of later cocktails/topics | T012 / T039 | Label examples provisional; avoid modern brands/technology in stories |
 | O005 | Authored/generated cast balance and whether runtime story generation is mandatory for submission | T034 | Plan generation module without counting it as confirmed scope |
-| O006 | Runtime image generation vs prepared/modular portraits | T035 | Prepared placeholder portrait pool |
-| O007 | Final base resolution, asset sizes, and additional exact palette values | T009 | B007 and named palette roles; no invented approved colors |
+| O006 | Runtime image generation vs prepared/modular portraits | T035 | Prepared portrait pool supplied by the user (D023) |
+| O007 | Final base resolution, asset sizes, and additional exact palette values (T008 measured: pygame-ce SCALED integer-scales, so the picture stays 1× with borders until the window is 2× size; the dev machine runs Windows at 150% and the game is not DPI-aware, so Windows stretches it) | T009 | B007 and named palette roles; no invented approved colors |
 | O009 | Currency/world location, progression thresholds, and score weights | T031 | Configurable illustrative values clearly labeled |
 | O010 | Human-only or mixed species cast | T034 | Human fixtures only; no anthropomorphic cast assumed approved |
 | O011 | Content boundaries and intended rating | T024 / T034 | Adult patrons and everyday issues; sensitive themes reviewed explicitly |

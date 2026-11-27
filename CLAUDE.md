@@ -29,6 +29,7 @@ Read only relevant detail documents; do not load the whole pack every turn.
 - Do not embed credentials in source, assets, logs, saves, or builds.
 - Small representative content sets are test fixtures, not final content limits.
 - Ask only when a material open decision blocks the current task. Continue independent work where possible. Do not invent a deadline, provider, or spending authorization.
+- Assets come from the user (D023). Whenever work needs artwork, images, character images/portraits, backgrounds, props, icons, animation frames, fonts, audio or any other asset, always ask the user for them before continuing that part. Name each file, its purpose, the format/size/layers/anchor from docs/ASSET_SPEC.md, and where to put it. Never generate, draw, download or otherwise source assets yourself, and never ship a stand-in as final. Code-drawn UI (buttons, panels, text) and the runtime missing-asset placeholder with diagnostic are not assets. Continue independent work while waiting.
 - Verify acceptance criteria; record evidence. Code generation alone does not complete a task.
 - Update task Evidence, docs/tasks/INDEX.md, and docs/STATUS.md. Update requirements only when their complete acceptance criteria pass.
 - Keep commits task-sized. Do not push, publish, or alter remote access unless authorized. Never fabricate a commit or test result.

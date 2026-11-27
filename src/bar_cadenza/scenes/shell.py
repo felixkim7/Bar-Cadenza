@@ -6,6 +6,7 @@ A scene has handle(event) and draw(screen); it switches scenes with app.go(...).
 
 from __future__ import annotations
 
+from dataclasses import replace
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
@@ -13,7 +14,6 @@ import pygame
 
 from bar_cadenza.app.clock import NS_PER_S
 from bar_cadenza.domain.encounter import DrinkState, Encounter, Phase, Talk
-from bar_cadenza.domain.session import Session
 from bar_cadenza.ui.buttons import ButtonList
 from bar_cadenza.ui.input_router import InputRouter
 from bar_cadenza.ui.palette import BALSAMICO, BURNT_COFFEE, CHAMPAGNE, HONEY_GARLIC, WHISKEY_SOUR
@@ -57,6 +57,12 @@ def _draw_frame(app: App, screen, title: str, subtitle: str = "", placeholder=Fa
         screen.blit(text, text.get_rect(center=banner.center))
 
 
+def _draw_notice(app: App, screen, key: str | None) -> None:
+    if key:
+        text = app.small_font.render(app.t(key), True, CHAMPAGNE)
+        screen.blit(text, text.get_rect(midtop=(CENTER_X, 560)))
+
+
 class MainMenu:
     """Shown before any language is chosen, so labels are bilingual."""
 
@@ -71,7 +77,9 @@ class MainMenu:
         if action == "new_game":
             self.app.go(LanguageSelect(self.app))
         elif action == "continue":
-            self.notice = "menu.no_save"  # ponytail: no saves until T011
+            if (notice := self.app.continue_game()) is None:
+                self.app.go(PreShift(self.app))
+            self.notice = notice
         elif action == "settings":
             self.notice = "menu.settings_unavailable"
         elif action == "quit":
@@ -97,8 +105,7 @@ class LanguageSelect:
     def handle(self, event) -> None:
         action = self.buttons.handle(event)
         if action in ("ko", "en"):
-            self.app.session = Session(language=action)
-            self.app.go(PreShift(self.app))
+            self.app.go(PreShift(self.app, notice=self.app.new_game(action)))
         elif action == "back":
             self.app.go(MainMenu(self.app))
 
@@ -109,8 +116,8 @@ class LanguageSelect:
 
 
 class PreShift:
-    def __init__(self, app: App) -> None:
-        self.app = app
+    def __init__(self, app: App, notice: str | None = None) -> None:
+        self.app, self.notice = app, notice
         self.buttons = ButtonList([("open", app.t("preshift.open"))], CENTER_X, 330)
 
     def handle(self, event) -> None:
@@ -122,6 +129,7 @@ class PreShift:
         subtitle = app.t("shift.number", n=app.session.shift)
         _draw_frame(app, screen, app.t("preshift.title"), subtitle, placeholder=True)
         self.buttons.draw(screen, app.font)
+        _draw_notice(app, screen, self.notice)
 
 
 class Bar:
@@ -376,6 +384,8 @@ class Results:
         self.app = app
         items = [("next", app.t("results.next_shift")), ("menu", app.t("results.main_menu"))]
         self.buttons = ButtonList(items, CENTER_X, 330)
+        # The shift is over, so a reload starts the next one, even after "Main menu".
+        self.notice = app.save_game(replace(app.session, shift=app.session.shift + 1))
 
     def handle(self, event) -> None:
         action = self.buttons.handle(event)
@@ -391,3 +401,4 @@ class Results:
         subtitle = app.t("shift.number", n=app.session.shift)
         _draw_frame(app, screen, app.t("results.title"), subtitle, placeholder=True)
         self.buttons.draw(screen, app.font)
+        _draw_notice(app, screen, self.notice)

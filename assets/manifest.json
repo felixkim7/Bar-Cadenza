@@ -39,9 +39,33 @@
       "file": "props/jigger_idle.png",
       "kind": "prop",
       "layer": "props",
-      "display": [60, 110],
+      "display": [38, 70],
       "anchor": [0.5, 1.0],
-      "hit": [0, 0, 60, 110],
+      "hit": [0, 0, 38, 70],
+      "state": "idle",
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    },
+    {
+      "asset_id": "prop_bottle_gin_idle",
+      "file": "props/bottle_gin_idle.png",
+      "kind": "prop",
+      "layer": "props",
+      "display": [70, 210],
+      "anchor": [0.5, 1.0],
+      "hit": [8, 36, 55, 174],
+      "state": "idle",
+      "source": "ChatGPT image, supplied by the user (D023)",
+      "license": "temporary test art, not for release"
+    },
+    {
+      "asset_id": "prop_shaker_idle",
+      "file": "props/shaker_idle.png",
+      "kind": "prop",
+      "layer": "props",
+      "display": [64, 160],
+      "anchor": [0.5, 0.936],
+      "hit": [4, 15, 56, 135],
       "state": "idle",
       "source": "ChatGPT image, supplied by the user (D023)",
       "license": "temporary test art, not for release"
@@ -53,6 +77,14 @@
       {"asset": "bg_counter_front", "at": [640, 720]},
       {"asset": "character_test_patron_neutral", "at": [640, 600]},
       {"asset": "bg_test_room", "at": [0, 0]}
+    ],
+    "bar": [
+      {"asset": "bg_test_room", "at": [0, 0]},
+      {"asset": "character_test_patron_neutral", "at": [640, 600]},
+      {"asset": "bg_counter_front", "at": [640, 720]},
+      {"asset": "prop_bottle_gin_idle", "at": [480, 574]},
+      {"asset": "prop_jigger_idle", "at": [610, 580]},
+      {"asset": "prop_shaker_idle", "at": [790, 578]}
     ]
   }
 }

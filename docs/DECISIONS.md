@@ -28,6 +28,9 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | D021 | Chat input: Enter sends at once, including a syllable still being composed; Shift+Enter inserts a line break; held Backspace/Delete/arrows repeat; no composition underline. Supersedes 'composition Enter must not submit' (user decision 2026-11-26, after the T003 IME test). |
 | D022 | Game time measures physical actions (pour duration, shake/stir duration and intensity, ice/dilution) and lets bartending and conversation run at once; it is not a countdown on the whole evening (user statement 2026-11-26). Resulting O008 policy: typing, reading, recipe browsing, busy actions and pending AI never pause time; Esc opens a pause menu (Resume / Main menu) that stops time; losing window focus or minimizing opens the same menu and ends any held action; a window drag/resize stall adds no time; other gaps stay capped at 1 s. |
 | D023 | All artwork and assets (images, character images/portraits, backgrounds, props, icons, animation frames, fonts, audio) are supplied by the user. Claude always asks for each needed asset with its spec and location, and never generates, draws, downloads or otherwise sources assets itself. Code-drawn UI and the runtime missing-asset placeholder are not assets (user decision 2026-11-26). |
+| D024 | T009 visual baseline approved (user check 2026-11-28): the B012 composition, text readability in ko/en, window resizing and the prop scale of about 7 px/cm. **Light direction for all new art:** a warm amber key from above and slightly in front (pendant lamps), shadows straight down; a restrained amber rim from the wall sconces behind the guest; cool navy fill only from the windows; props highlighted on top and on the viewer-facing side. All current images are temporary drafts; the user may supply relit art later. Do not relight or rework the current patron now. Supersedes O007 except palette values. |
+| D025 | Temporary images the user supplies are ChatGPT-generated unless the user says otherwise; record that as their source without asking (user statement 2026-11-28). |
+| D026 | The game aims to be realistic. Bottles and other props may carry real label text and brands, as long as the art style stays consistent with the flat-colour props (ART_DIRECTION). UI and localized text are still never baked into sprites (user decision 2026-11-28). Trademark clearance for a public or Steam release (D008) is not decided. |
 
 ## Engineering baselines
 | ID | Baseline | Revisit when |
@@ -38,11 +41,12 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | B004 | One foreground customer at a time; background ambience only | User requests simultaneous service |
 | B005 | Regulars plus expandable newcomers; generated text profiles as a planned later module | Cast policy finalized |
 | B006 | Separate craft, preference-fit, and rapport results | Playtesting/calibration |
-| B007 | 1280×720 logical layout, scalable window; final raster export sizes decided at visual gate | T009 visual test |
+| B007 | 1280×720 logical layout, scalable window; export sizes, scaling and DPI set in B012 (T009) | T009 visual test |
 | B008 | Persist language per save; do not translate past transcripts on load | User chooses mid-save language switching |
 | B009 | Busy-action-aware reply grace; no automatic pause; network delay never directly penalizes rapport | Timing playtest |
 | B010 | Main-menu and explicit pause behavior left separate from the no-chat-pause rule; pause policy settled in D022 (T007) | Playtest shows the pause menu or focus pause misfires |
 | B011 | PyInstaller one-folder windowed build; resources via app/paths.resource_root (bundle or repo root, never cwd); user data in %LOCALAPPDATA%/BarCadenza via platformdirs (T005) | A Windows build or distribution issue appears |
+| B012 | Visual baseline (T009, details in ASSET_SPEC "Visual baseline"). **Canvas:** scenes draw on the 1280×720 logical canvas. **Scaling:** the game is per-monitor DPI-aware and SDL scales the canvas once, fractionally and smoothly, to fill the window; bars appear only on the axis whose ratio differs. **Opening window:** 80% of the desktop. **Camera:** the bartender's view across a two-tier bar. **Exports:** art at ≥2× its logical display size, with the aspect within 1%. **Anchors:** bottom-centre for characters and props. **Props:** a shared scale of about 7 logical px per cm. | Text or art looks too soft at a tested DPI (render at native resolution, T043), or the user changes the camera |
 
 ## Open decisions and latest responsible task
 | ID | Decision | Needed by | Default approach until answered |
@@ -50,10 +54,10 @@ Status vocabulary: **confirmed** = user decision; **baseline** = reversible impl
 | O001 | Submission requirements (deliverable format); deadline is confirmed in D020 | T046 | Ask before T046; keep dependency order |
 | O002 | First AI provider, model, key ownership and spending cap | T004 live branch / T025 | Mock provider; zero paid calls |
 | O003 | Final catalogue source and target size | T039 | Curated fixtures and importer contract |
-| O004 | Strict history vs period-inspired fiction; treatment of later cocktails/topics | T012 / T039 | Label examples provisional; avoid modern brands/technology in stories |
+| O004 | Strict history vs period-inspired fiction; treatment of later cocktails, brands and topics (real brands are allowed, D026; whether they must be period-correct is open) | T012 / T039 | Label examples provisional; avoid modern technology in stories |
 | O005 | Authored/generated cast balance and whether runtime story generation is mandatory for submission | T034 | Plan generation module without counting it as confirmed scope |
 | O006 | Runtime image generation vs prepared/modular portraits | T035 | Prepared portrait pool supplied by the user (D023) |
-| O007 | Final base resolution, asset sizes, and additional exact palette values (T008 measured: pygame-ce SCALED integer-scales, so the picture stays 1× with borders until the window is 2× size; the dev machine runs Windows at 150% and the game is not DPI-aware, so Windows stretches it) | T009 | B007 and named palette roles; no invented approved colors |
+| O007 | Still open: any exact palette values beyond the five named roles. The visual baseline and light direction were approved as D024 (T009); resolution, scaling and asset sizes are baseline B012. | T041 | The five named palette roles only; no invented approved colors |
 | O009 | Currency/world location, progression thresholds, and score weights | T031 | Configurable illustrative values clearly labeled |
 | O010 | Human-only or mixed species cast | T034 | Human fixtures only; no anthropomorphic cast assumed approved |
 | O011 | Content boundaries and intended rating | T024 / T034 | Adult patrons and everyday issues; sensitive themes reviewed explicitly |

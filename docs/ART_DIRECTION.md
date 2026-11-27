@@ -36,7 +36,7 @@ Exact added colors are open until the visual gate. Use named roles; do not label
 | Layer | Edges | Color/shading | Texture |
 |---|---|---|---|
 | Character | Confident dark burgundy/charcoal contour, varied weight | Base + 1–2 hard-edged shadow/highlight shapes | Minimal; restrained fabric only |
-| Prop | Precise contour consistent with characters | Base + simplified material highlights | Minimal; simplified labels |
+| Prop | Precise contour consistent with characters | Base + simplified material highlights | Minimal; labels may show real text and brands, drawn in the prop style (D026) |
 | Background | Softer distant edges; selected architectural lines | Painted warm/cool light and subtle variation | Controlled wood/fabric/wall grain |
 | UI | Clean flat geometry | Strong actionable contrast | None or barely perceptible |
 

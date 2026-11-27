@@ -1,10 +1,12 @@
-"""Application shell scenes (T006). Pre-shift, bar and results are labelled placeholders.
+"""Application shell scenes (T006). Pre-shift and results are labelled placeholders; the bar
+is composed from the asset manifest with dialogue and recipe panels (T009).
 
 A scene has handle(event) and draw(screen); it switches scenes with app.go(...).
 """
 
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import TYPE_CHECKING
 
 import pygame
@@ -21,9 +23,24 @@ if TYPE_CHECKING:
     from bar_cadenza.app.main import App
 
 CENTER_X = 640
-FIELD_RECT = pygame.Rect(100, 528, 1080, 118)
 REPLY_DELAY_NS = 3 * NS_PER_S // 2
 PAUSE_EVENTS = {pygame.WINDOWFOCUSLOST, pygame.WINDOWMINIMIZED}  # D022: unseen → paused
+
+# Bar layout (T009, UI_DESIGN baseline): guest in the middle, tools on the work surface,
+# conversation on the left, recipe and actions on the right, typing over the cabinets.
+SCENE = "bar"  # assets/manifest.json
+SHAKER = "prop_shaker_idle"
+TOOLS = {  # interactable props and their name keys; only these get hover feedback
+    "prop_bottle_gin_idle": "bar.prop_gin",
+    "prop_jigger_idle": "bar.prop_jigger",
+    SHAKER: "bar.prop_shaker",
+}
+PAD = 14
+TRANSCRIPT_RECT = pygame.Rect(16, 44, 340, 548)
+RECIPE_RECT = pygame.Rect(924, 44, 340, 352)
+FIELD_RECT = pygame.Rect(16, 604, 1248, 108)
+ROOM_DIM = (200, 200, 200)  # multiply the room by ~78% so the guest and tools read first
+SHAKE_STEP_NS = 60_000_000  # a held shaker hops every 60 ms (code-drawn active state)
 
 
 def _draw_frame(app: App, screen, title: str, subtitle: str = "", placeholder=False) -> None:
@@ -108,8 +125,9 @@ class PreShift:
 
 
 class Bar:
-    """Placeholder bar (T007 test bench): one guest, a chat field, a hold-to-stir tool and
-    serving, each on its own state track, plus the D022 pause menu."""
+    """The bar, composed from the manifest's "bar" scene (T009) around the T007 test bench:
+    one guest, chat, a hold-the-shaker mixing action and serving, each on its own state
+    track, plus the D022 pause menu. F3 shows the state readout."""
 
     def __init__(self, app: App) -> None:
         self.app = app
@@ -118,9 +136,13 @@ class Bar:
         self.encounter = Encounter(f"shift{app.session.shift}-guest1")
         self.encounter.move(Phase.ORDERING)
         self.field = TextField()
-        self.stir_rect = pygame.Rect(100, 245, 440, 196)
+        placed = app.assets.placed(SCENE)
+        self.stir_rect = next(
+            pygame.Rect(a.hit).move(r.topleft) for a, r in placed if a.asset_id == SHAKER
+        )
         items = [("add", t("bar.add")), ("serve", t("bar.serve")), ("close", t("bar.close"))]
-        self.buttons = ButtonList(items, 900, 245, width=440)
+        top = RECIPE_RECT.bottom + 16
+        self.buttons = ButtonList(items, RECIPE_RECT.centerx, top, RECIPE_RECT.width, 48, 10)
         pause_items = [("resume", t("bar.resume")), ("menu", t("results.main_menu"))]
         self.pause_buttons = ButtonList(pause_items, CENTER_X, 300)
         self.router = InputRouter(self.field, FIELD_RECT, self.buttons, {"stir": self.stir_rect})
@@ -128,14 +150,26 @@ class Bar:
         self.stir_from: int | None = None
         self.notice: str | None = None
         self.you = self.guest = ""
+        self.log: list[tuple[str, str]] = []  # (speaker key, text), oldest first
         self.reply_due: tuple[int, int] | None = None  # (sim_ns, revision)
+        self.show_state = False
         self._ime_rect = None
+        self._transcript_bg = pygame.Surface(TRANSCRIPT_RECT.size, pygame.SRCALPHA)
+        pygame.draw.rect(
+            self._transcript_bg,
+            (*BURNT_COFFEE, 225),
+            ((0, 0), TRANSCRIPT_RECT.size),
+            border_radius=8,
+        )
 
     @property
     def paused(self) -> bool:
         return self.router.modal is not None
 
     def handle(self, event) -> None:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_F3:
+            self.show_state = not self.show_state
+            return
         esc = event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
         if event.type in PAUSE_EVENTS or (esc and not self.paused):
             if not self.paused:
@@ -155,6 +189,7 @@ class Bar:
         enc, now = self.encounter, self.app.sim.sim_ns
         if kind == "send":
             self.you, self.guest = value, ""
+            self.log.append(("bar.you", value))
             self.reply_due = (now + REPLY_DELAY_NS, enc.send_player_turn())
             self.field.send_blocked = not enc.can_send
         elif kind == "hold":
@@ -179,10 +214,12 @@ class Bar:
     def _button(self, action: str) -> None:
         enc, drink = self.encounter, self._drink()
         self.notice = None
-        if action == "add" and drink is not DrinkState.ASSEMBLING:
+        if action == "add":
             if drink in (None, DrinkState.SERVED, DrinkState.DISCARDED):
                 self.stirred_ns = 0  # a new glass
-            enc.move_drink(DrinkState.ASSEMBLING)
+            if drink is not DrinkState.ASSEMBLING:
+                enc.move_drink(DrinkState.ASSEMBLING)
+            self.notice = "bar.added"
         elif action == "serve":
             if drink not in (DrinkState.ASSEMBLING, DrinkState.READY):
                 self.notice = "bar.need_ingredient"
@@ -190,6 +227,7 @@ class Bar:
             if drink is DrinkState.ASSEMBLING:
                 enc.move_drink(DrinkState.READY)
             enc.move_drink(DrinkState.SERVED)
+            self.notice = "bar.served"
             if enc.phase is Phase.ORDERING:
                 enc.move(Phase.VISITING)
         elif action == "close":
@@ -202,46 +240,27 @@ class Bar:
         if self.reply_due and self.app.sim.sim_ns >= self.reply_due[0]:
             if self.encounter.receive_reply(self.reply_due[1]):
                 self.guest = self.app.t("bar.placeholder_reply")
+                self.log.append(("bar.guest", self.guest))
                 self.encounter.read_reply()
             self.reply_due = None
             self.field.send_blocked = not self.encounter.can_send
         self.field.end_frame()
 
     def draw(self, screen) -> None:
-        app, enc, router = self.app, self.encounter, self.router
-        now = app.sim.sim_ns
-        minutes, seconds = divmod((now - self.opened_ns) // NS_PER_S, 60)
-        subtitle = app.t("bar.shift_time", time=f"{minutes:02d}:{seconds:02d}")
-        _draw_frame(app, screen, app.t("bar.title"), subtitle, placeholder=True)
-        small = app.small_font
-        drink = self._drink() or DrinkState.EMPTY
-        state = app.t(
-            "bar.state", phase=enc.phase, drink=drink, talk=enc.talk, input=router.context
-        )
-        text = small.render(state, True, CHAMPAGNE)
-        screen.blit(text, text.get_rect(midtop=(CENTER_X, 208)))
-
+        app, router = self.app, self.router
+        now, small = app.sim.sim_ns, app.small_font
         held = router.captured == "stir"
-        rect = self.stir_rect
-        pygame.draw.rect(screen, HONEY_GARLIC if held else BURNT_COFFEE, rect, border_radius=6)
-        pygame.draw.rect(screen, WHISKEY_SOUR, rect, 4 if held else 2, border_radius=6)
-        stirred = self.stirred_ns + (now - self.stir_from if self.stir_from is not None else 0)
-        lines = [
-            (app.font, app.t("bar.stir")),
-            (small, app.t("bar.stirred", seconds=f"{stirred / NS_PER_S:.1f}")),
-            (small, app.t(self.notice) if self.notice else ""),
-        ]
-        for i, (font, line) in enumerate(lines):
-            text = font.render(line, True, CHAMPAGNE)
-            screen.blit(text, text.get_rect(center=(rect.centerx, rect.y + 50 + i * 48)))
-        self.buttons.draw(screen, app.font, active=not (router.text_focus or self.paused))
-
-        guest = self.guest and app.t("bar.guest", text=self.guest)
-        if enc.talk is Talk.REQUEST_PENDING:
-            guest = app.t("bar.ai_pending")
-        for i, line in enumerate((self.you and app.t("bar.you", text=self.you), guest)):
-            text = small.render(_fit(small, line or "", FIELD_RECT.width), True, CHAMPAGNE)
-            screen.blit(text, (FIELD_RECT.x, 455 + i * 30))
+        for asset, rect in app.assets.placed(SCENE):
+            if held and asset.asset_id == SHAKER and now // SHAKE_STEP_NS % 2:
+                rect = rect.move(0, -5)
+            screen.blit(app.assets.image(asset.asset_id), rect)
+            if asset.layer == "room":
+                screen.fill(ROOM_DIM, special_flags=pygame.BLEND_RGB_MULT)
+        self._draw_transcript(screen)
+        self._draw_recipe(screen)
+        self.buttons.draw(screen, small, active=not (router.text_focus or self.paused))
+        self._draw_tool_feedback(screen, held, now)  # labels above the panels
+        self._draw_status(screen, now)
 
         focused = router.text_focus
         pygame.draw.rect(screen, BURNT_COFFEE, FIELD_RECT, border_radius=6)
@@ -263,12 +282,93 @@ class Bar:
             screen.blit(text, text.get_rect(midtop=(CENTER_X, 200)))
             self.pause_buttons.draw(screen, app.font)
 
+    def _draw_tool_feedback(self, screen, held: bool, now: int) -> None:
+        """Outline and name the tool under the pointer (or the one being held)."""
+        app = self.app
+        hit = app.assets.hit_test(SCENE, pygame.mouse.get_pos())
+        target = (SHAKER, self.stir_rect) if held else (hit[0].asset_id, hit[1]) if hit else None
+        if target is None or target[0] not in TOOLS:
+            return
+        asset_id, rect = target
+        pygame.draw.rect(screen, WHISKEY_SOUR, rect.inflate(8, 8), 4 if held else 2, 6)
+        label = app.t(TOOLS[asset_id])
+        if asset_id == SHAKER:
+            stirred = self.stirred_ns + (now - self.stir_from if self.stir_from is not None else 0)
+            seconds = f"{stirred / NS_PER_S:.1f}"
+            label = f"{label} · {app.t('bar.stir')} · {app.t('bar.stirred', seconds=seconds)}"
+        _tag(screen, app.small_font, label, (rect.centerx, rect.top - 8))
 
-def _fit(font, text: str, width: int) -> str:
-    """First line of `text` within `width`, with an ellipsis if anything was cut."""
-    text = text.replace("\n", " ")
-    end = wrap_spans(text, width, lambda s: font.size(s)[0])[0][1]
-    return text if end == len(text) else text[:end].rstrip() + "…"
+    def _draw_status(self, screen, now: int) -> None:
+        app, enc = self.app, self.encounter
+        minutes, seconds = divmod((now - self.opened_ns) // NS_PER_S, 60)
+        lines = [app.t("bar.shift_time", time=f"{minutes:02d}:{seconds:02d}")]
+        if self.show_state:
+            drink = self._drink() or DrinkState.EMPTY
+            context = self.router.context
+            lines.append(
+                app.t("bar.state", phase=enc.phase, drink=drink, talk=enc.talk, input=context)
+            )
+        if self.notice:
+            lines.append(app.t(self.notice))
+        for i, line in enumerate(lines):
+            _tag(screen, app.small_font, line, (CENTER_X, 38 + i * 36))
+
+    def _draw_transcript(self, screen) -> None:
+        """Newest lines at the bottom; older ones scroll off the top."""
+        app, small, rect = self.app, self.app.small_font, TRANSCRIPT_RECT
+        screen.blit(self._transcript_bg, rect)
+        pygame.draw.rect(screen, HONEY_GARLIC, rect, 2, border_radius=8)
+        title = app.font.render(app.t("bar.transcript"), True, WHISKEY_SOUR)
+        screen.blit(title, (rect.x + PAD, rect.y + PAD))
+        entries = [
+            (app.t(key, text=text), WHISKEY_SOUR if key == "bar.you" else CHAMPAGNE)
+            for key, text in self.log
+        ]
+        if self.encounter.talk is Talk.REQUEST_PENDING:
+            entries.append((app.t("bar.ai_pending"), CHAMPAGNE))
+        width = rect.width - 2 * PAD
+        rows = [(row, color) for text, color in entries for row in _wrapped(small, text, width)]
+        top, y = rect.y + PAD + title.get_height() + 8, rect.bottom - PAD - small.get_linesize()
+        for row, color in reversed(rows):
+            if y < top:
+                break
+            screen.blit(small.render(row, True, color), (rect.x + PAD, y))
+            y -= small.get_linesize()
+
+    def _draw_recipe(self, screen) -> None:
+        """Recipe card on Champagne paper (palette role). The sample text is a layout fixture
+        until the recipe book (T018)."""
+        rect = RECIPE_RECT
+        pygame.draw.rect(screen, CHAMPAGNE, rect, border_radius=8)
+        pygame.draw.rect(screen, HONEY_GARLIC, rect, 2, border_radius=8)
+        y = rect.y + PAD
+        for font, color, text in recipe_lines(self.app):
+            for row in _wrapped(font, text, rect.width - 2 * PAD):
+                screen.blit(font.render(row, True, color), (rect.x + PAD, y))
+                y += font.get_linesize()
+
+
+def recipe_lines(app: App) -> list[tuple[pygame.font.Font, tuple[int, int, int], str]]:
+    t = app.t
+    lines = [(app.small_font, HONEY_GARLIC, t("bar.recipe_book"))]
+    lines.append((app.font, BALSAMICO, t("bar.recipe_sample_title")))
+    lines += [(app.small_font, BALSAMICO, line) for line in t("bar.recipe_sample").split("\n")]
+    return lines
+
+
+@lru_cache(maxsize=1024)
+def _wrapped(font: pygame.font.Font, text: str, width: int) -> tuple[str, ...]:
+    """Wrapped rows of `text`, cached so a long transcript is not re-measured every frame."""
+    return tuple(text[a:b] for a, b in wrap_spans(text, width, lambda s: font.size(s)[0]))
+
+
+def _tag(screen, font, text: str, midbottom: tuple[int, int]) -> None:
+    """A small label on a dark plate, kept on screen."""
+    label = font.render(text, True, CHAMPAGNE)
+    box = label.get_rect(midbottom=midbottom).inflate(16, 8).clamp(screen.get_rect())
+    pygame.draw.rect(screen, BURNT_COFFEE, box, border_radius=6)
+    pygame.draw.rect(screen, HONEY_GARLIC, box, 1, border_radius=6)
+    screen.blit(label, label.get_rect(center=box.center))
 
 
 class Results:

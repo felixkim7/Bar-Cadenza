@@ -6,7 +6,7 @@ import pygame
 import pytest
 
 from bar_cadenza.app import main as app_main
-from bar_cadenza.app.main import FONT, LOGICAL_SIZE, App, StartupError, load_strings
+from bar_cadenza.app.main import App, StartupError, load_strings
 from bar_cadenza.app.paths import resource_root
 from bar_cadenza.scenes.shell import Bar, LanguageSelect, MainMenu, PreShift, Results
 
@@ -14,9 +14,8 @@ E = pygame.event.Event
 
 
 @pytest.fixture
-def app():
-    pygame.font.init()
-    return App(pygame.Surface(LOGICAL_SIZE), load_strings(resource_root()), resource_root() / FONT)
+def app(new_app):
+    return new_app
 
 
 def click(app: App, action: str) -> None:
@@ -110,6 +109,17 @@ def test_run_reports_missing_resources_and_exits_1(tmp_path, monkeypatch):
     monkeypatch.setattr(pygame.display, "message_box", lambda *a, **k: shown.append(a))
     assert app_main.run(max_seconds=0.1) == 1
     assert "NanumGothic" in shown[0][1]
+
+
+def test_run_reports_a_bad_asset_manifest_by_name(tmp_path, monkeypatch):
+    shown = []
+    for folder in ("assets/fonts", "content/locales"):
+        shutil.copytree(resource_root() / folder, tmp_path / folder)
+    (tmp_path / "assets/manifest.json").write_text('{"version": 1, "assets": [{}]}')
+    monkeypatch.setattr(app_main, "resource_root", lambda: tmp_path)
+    monkeypatch.setattr(pygame.display, "message_box", lambda *a, **k: shown.append(a))
+    assert app_main.run(max_seconds=0.1) == 1
+    assert "manifest.json" in shown[0][1] and "assets.0.asset_id" in shown[0][1]
 
 
 def test_run_headless_starts_and_exits_cleanly(monkeypatch):

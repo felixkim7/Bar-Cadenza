@@ -173,12 +173,14 @@ def test_shipped_manifest_is_valid_and_never_points_at_references():
     assert all(not a.file.startswith("references") for a in manifest.assets)
 
 
-def test_scaled_mode_mapping_uses_integer_scale_and_centres():
+def test_scaled_mode_mapping_fills_one_axis_and_centres_the_other():
     assert logical_to_window((0, 0), (1280, 720)) == (0, 0)
-    assert logical_to_window((1280, 720), (2560, 1440)) == (2560, 1440)  # exactly 2x
-    assert logical_to_window((0, 0), (1600, 1000)) == (160, 140)  # still 1x, bars all round
-    assert logical_to_window((640, 360), (1840, 720)) == (920, 360)
-    assert logical_to_window((0, 0), (2600, 1500)) == (20, 30)  # 2x with small bars
+    assert logical_to_window((1280, 720), (2880, 1620)) == (2880, 1620)  # 2.25x, no bars
+    # Measured by window capture in T009: 1478x944 shows the canvas at y 56..887,
+    # 1818x804 at x 194..1623, and logical x 600 at window x 693.
+    assert logical_to_window((0, 0), (1478, 944)) == (0, 56)
+    assert logical_to_window((0, 0), (1818, 804)) == (194, 0)
+    assert round(logical_to_window((600, 340), (1478, 944))[0]) == 693
 
 
 def test_layer_test_window_runs_headless_with_placeholders():

@@ -103,8 +103,11 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
         ingredient_ids = {i["ingredient_id"] for i in ingredients}
         if len(ingredient_ids) != len(ingredients):
             errors.append("Duplicate example ingredient IDs")
-        recipe = json.loads((root / "content/examples/recipe.json").read_text(encoding="utf-8"))
-        for addition in recipe["ingredients"]:
+        # T010 content-file shape; the full contract is domain/catalogue.build_catalogue.
+        recipes = json.loads((root / "content/examples/recipe.json").read_text(encoding="utf-8"))[
+            "recipes"
+        ]
+        for addition in (a for recipe in recipes for a in recipe["ingredients"]):
             if addition["ingredient_id"] not in ingredient_ids:
                 errors.append("Example recipe has unknown ingredient")
             if type(addition["volume_ul"]) is not int or addition["volume_ul"] <= 0:
@@ -112,10 +115,10 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
         for ingredient in ingredients:
             if not 0 <= ingredient["abv_fraction"] <= 1:
                 errors.append("Invalid example ABV")
-        character = json.loads(
+        characters = json.loads(
             (root / "content/examples/character.json").read_text(encoding="utf-8")
-        )
-        if character["age_years"] < 18:
+        )["characters"]
+        if any(character["age_years"] < 18 for character in characters):
             errors.append("Example patron is not adult")
     except (OSError, ValueError, KeyError, TypeError) as exc:
         errors.append(f"Example contract failure: {exc}")

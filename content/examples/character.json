@@ -1,40 +1,44 @@
 {
   "schema_version": 1,
   "example_only": true,
-  "character_id": "violinist_example",
-  "name": {
-    "en": "The violinist",
-    "ko": "바이올리니스트"
-  },
-  "age_years": 29,
-  "appearance": "Adult woman with short wavy dark hair, burgundy jacket, cream blouse, violin case. Flat-color Western cartoon.",
-  "personality": [
-    "observant",
-    "dry humor",
-    "reserved at first"
-  ],
-  "voice": "Concise opening; thoughtful when invited.",
-  "stable_facts": [
-    "Plays violin professionally."
-  ],
-  "private_facts": [
-    "Unsure about accepting a touring engagement."
-  ],
-  "initial_revealed_facts": [
-    "Has just finished a performance."
-  ],
-  "preferences": {
-    "favorite_spirits": [
-      "white_rum"
-    ],
-    "dislikes": [
-      "bitter"
-    ]
-  },
-  "opening": {
-    "en": "Something bright and cold. Nothing bitter tonight.",
-    "ko": "상큼하고 차가운 걸로 부탁해요. 오늘은 쓴맛은 피하고 싶네요."
-  },
-  "portrait_id": "character_violinist_neutral",
-  "provenance": "Illustrative authored profile; name, age and story are proposals, not finalized cast canon."
+  "characters": [
+    {
+      "character_id": "violinist_example",
+      "name": {
+        "en": "The violinist",
+        "ko": "바이올리니스트"
+      },
+      "age_years": 29,
+      "appearance": "Adult woman with short wavy dark hair, burgundy jacket, cream blouse, violin case. Flat-color Western cartoon.",
+      "personality": [
+        "observant",
+        "dry humor",
+        "reserved at first"
+      ],
+      "voice": "Concise opening; thoughtful when invited.",
+      "stable_facts": [
+        "Plays violin professionally."
+      ],
+      "private_facts": [
+        "Unsure about accepting a touring engagement."
+      ],
+      "initial_revealed_facts": [
+        "Has just finished a performance."
+      ],
+      "preferences": {
+        "favorite_spirits": [
+          "white_rum"
+        ],
+        "dislikes": [
+          "bitter"
+        ]
+      },
+      "opening": {
+        "en": "Something bright and cold. Nothing bitter tonight.",
+        "ko": "상큼하고 차가운 걸로 부탁해요. 오늘은 쓴맛은 피하고 싶네요."
+      },
+      "portrait_id": "character_violinist_neutral",
+      "provenance": "Illustrative authored profile; name, age and story are proposals, not finalized cast canon."
+    }
+  ]
 }

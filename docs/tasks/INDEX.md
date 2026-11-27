@@ -13,7 +13,7 @@ All tasks start not_started. Follow dependency order; document any safe deferral
 | [T007](T007.md) | P1 | Input routing and independent state model | T006 | done |
 | [T008](T008.md) | P1 | Asset loader and layered scene manifest | T006 | done |
 | [T009](T009.md) | P1 | Visual integration gate | T007, T008 | done |
-| [T010](T010.md) | P2 | Typed content and gameplay contracts | T007 | not_started |
+| [T010](T010.md) | P2 | Typed content and gameplay contracts | T007 | done |
 | [T011](T011.md) | P2 | Save schema and repository foundation | T010 | not_started |
 | [T012](T012.md) | P2 | Representative catalogue and offline guest | T010 | not_started |
 | [T013](T013.md) | P2 | Complete offline visit checkpoint | T006, T008, T011, T012 | not_started |

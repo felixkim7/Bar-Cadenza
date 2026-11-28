@@ -14,7 +14,7 @@ All tasks start not_started. Follow dependency order; document any safe deferral
 | [T008](T008.md) | P1 | Asset loader and layered scene manifest | T006 | done |
 | [T009](T009.md) | P1 | Visual integration gate | T007, T008 | done |
 | [T010](T010.md) | P2 | Typed content and gameplay contracts | T007 | done |
-| [T011](T011.md) | P2 | Save schema and repository foundation | T010 | in_progress |
+| [T011](T011.md) | P2 | Save schema and repository foundation | T010 | done |
 | [T012](T012.md) | P2 | Representative catalogue and offline guest | T010 | done |
 | [T013](T013.md) | P2 | Complete offline visit checkpoint | T006, T008, T011, T012 | not_started |
 | [T014](T014.md) | P3 | Measured pouring and vessel transfer | T013 | not_started |
